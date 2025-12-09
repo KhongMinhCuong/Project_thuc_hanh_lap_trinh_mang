@@ -6,13 +6,14 @@
 #define CMD_USER "USER"             // Đăng nhập: USER <username>
 #define CMD_PASS "PASS"             // Mật khẩu: PASS <password>
 #define CMD_REGISTER "REGISTER"     // Đăng ký: REGISTER <username> <password>
-#define CMD_LIST "LIST"             // Lấy danh sách file
+#define CMD_LIST "LIST"             // Lấy danh sách file của mình
+#define CMD_LISTSHARED "LISTSHARED" // Lấy danh sách file được share
 #define CMD_SEARCH "SEARCH"         // Tìm kiếm file: SEARCH <keyword>
 #define CMD_SHARE "SHARE"           // Chia sẻ file: SHARE <filename> <target_user>
 #define CMD_DELETE "DELETE"         // Xóa file: DELETE <filename>
-#define CMD_UPLOAD_CHECK "SITE QUOTA_CHECK" // Kiểm tra dung lượng [cite: 53]
+#define CMD_UPLOAD_CHECK "SITE QUOTA_CHECK" // Kiểm tra dung lượng
 #define CMD_UPLOAD "STOR"           // Upload file
-#define CMD_DOWNLOAD "RETR"         // Download file [cite: 63]
+#define CMD_DOWNLOAD "RETR"         // Download file
 
 // --- Mã Trạng Thái (Status Codes) ---
 #define CODE_OK "200"

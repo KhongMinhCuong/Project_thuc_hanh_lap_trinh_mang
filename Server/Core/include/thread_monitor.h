@@ -1,6 +1,7 @@
 #ifndef THREAD_MONITOR_H
 #define THREAD_MONITOR_H
 
+#include "server_config.h"
 #include <thread>
 #include <atomic>
 #include <mutex>
@@ -39,18 +40,15 @@ public:
     void reportWorkerThreadEnd();
     void reportDedicatedThreadStart();
     void reportDedicatedThreadEnd();
-    void reportConnectionCount(int count);
+    void reportConnectionCount(std::thread::id workerId, int count);  // Báo cáo từ từng worker
     void reportBytesTransferred(long long bytes);
 
     // Lấy thông tin stats (cho admin console)
     void printStats();
     
-    // Kiểm tra có cần tạo thêm thread không
-    bool shouldCreateWorkerThread();
-    bool isSystemOverloaded();
     bool canCreateDedicatedThread();  // Kiểm tra còn slot để tạo DedicatedThread không
     
-    // Quản lý Worker Thread Pool (auto-scaling)
+    // Quản lý Worker Thread Pool
     void registerWorkerThread(WorkerThread* worker, std::thread::id threadId);
     void unregisterWorkerThread(std::thread::id threadId);
     int getActiveWorkerCount() const;
@@ -72,26 +70,19 @@ private:
     std::atomic<bool> running{false};
     ThreadStats stats;
     
-    // Worker Thread Pool (cho auto-scaling)  
+    // Worker Thread Pool
     std::mutex poolMutex;
     std::map<std::thread::id, WorkerThread*> workerPool;
+    std::map<std::thread::id, int> workerConnections;  // Track connections per worker
     
     // Dedicated Thread Pool (cho cleanup)
     std::mutex dedicatedMutex;
     std::vector<std::thread> dedicatedThreads;
     std::set<std::thread::id> finishedThreadIds;
     
-    // Ngưỡng cảnh báo
-    static constexpr int MIN_WORKER_THREADS = 1;
-    static constexpr int MAX_WORKER_THREADS = 10;
-    
-    // File I/O threads - điều chỉnh theo:
-    // - RAM: 8GB → 100-200 threads OK
-    // - HDD: 50-100 (tránh thrashing)
-    // - SSD: 100-300 (tốc độ cao hơn)
-    // - Production: 100-200 là an toàn
-    static constexpr int MAX_DEDICATED_THREADS = 100;  // Upload/Download đồng thời
-    static constexpr int MAX_CONNECTIONS_PER_WORKER = 50;
+    // Ngưỡng cảnh báo - Sử dụng ServerConfig
+    static constexpr int MAX_DEDICATED_THREADS = ServerConfig::MAX_DEDICATED_THREADS;
+    static constexpr int FIXED_WORKER_THREADS = ServerConfig::FIXED_WORKER_THREADS;
 };
 
 #endif // THREAD_MONITOR_H

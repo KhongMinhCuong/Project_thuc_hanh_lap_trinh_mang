@@ -92,15 +92,29 @@ QWidget* MainWindow::createDashboardPage() {
     btnLayout->addWidget(btnDelete);
     btnLayout->addStretch();
     
+    // Tạo TabWidget với 2 tabs
+    tabWidget = new QTabWidget;
+    
+    // Tab 1: My Files
     fileTable = new QTableWidget;
     fileTable->setColumnCount(3);
     fileTable->setHorizontalHeaderLabels({"Filename", "Size", "Owner"});
     fileTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     fileTable->setSelectionBehavior(QTableWidget::SelectRows);
+    
+    // Tab 2: Shared Files
+    sharedFileTable = new QTableWidget;
+    sharedFileTable->setColumnCount(3);
+    sharedFileTable->setHorizontalHeaderLabels({"Filename", "Size", "Shared By"});
+    sharedFileTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    sharedFileTable->setSelectionBehavior(QTableWidget::SelectRows);
+    
+    tabWidget->addTab(fileTable, "My Files");
+    tabWidget->addTab(sharedFileTable, "Shared with Me");
 
     l->addLayout(topBar);
     l->addLayout(btnLayout);
-    l->addWidget(fileTable);
+    l->addWidget(tabWidget);
 
     connect(btnRefresh, &QPushButton::clicked, this, &MainWindow::onRefreshClicked);
     connect(btnUpload, &QPushButton::clicked, this, &MainWindow::onUploadClicked);
@@ -108,6 +122,7 @@ QWidget* MainWindow::createDashboardPage() {
     connect(btnShare, &QPushButton::clicked, this, &MainWindow::onShareClicked);
     connect(btnDelete, &QPushButton::clicked, this, &MainWindow::onDeleteClicked);
     connect(btnLogout, &QPushButton::clicked, this, &MainWindow::onLogoutClicked);
+    connect(tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
     return p;
 }
 
@@ -127,22 +142,36 @@ void MainWindow::handleLoginSuccess() {
 }
 
 void MainWindow::onRefreshClicked() {
-    netManager->requestFileList();
+    // Refresh tab hiện tại
+    onTabChanged(tabWidget->currentIndex());
+}
+
+void MainWindow::onTabChanged(int index) {
+    if (index == 0) {
+        // Tab "My Files" - request LIST
+        netManager->requestFileList();
+    } else if (index == 1) {
+        // Tab "Shared with Me" - request LISTSHARED
+        netManager->requestSharedFileList();
+    }
 }
 
 void MainWindow::handleFileList(QString data) {
-    fileTable->setRowCount(0); // Xóa cũ
+    // Xác định table nào cần update dựa vào tab hiện tại
+    QTableWidget* targetTable = (tabWidget->currentIndex() == 0) ? fileTable : sharedFileTable;
+    
+    targetTable->setRowCount(0); // Xóa cũ
     // Giả sử server gửi: "file1.txt|1024|admin\nfile2.jpg|2048|user"
     QStringList rows = data.split('\n', Qt::SkipEmptyParts);
     
     for(const QString &line : rows) {
         QStringList cols = line.split('|');
         if(cols.size() >= 3) {
-            int row = fileTable->rowCount();
-            fileTable->insertRow(row);
-            fileTable->setItem(row, 0, new QTableWidgetItem(cols[0]));
-            fileTable->setItem(row, 1, new QTableWidgetItem(cols[1]));
-            fileTable->setItem(row, 2, new QTableWidgetItem(cols[2]));
+            int row = targetTable->rowCount();
+            targetTable->insertRow(row);
+            targetTable->setItem(row, 0, new QTableWidgetItem(cols[0]));
+            targetTable->setItem(row, 1, new QTableWidgetItem(cols[1]));
+            targetTable->setItem(row, 2, new QTableWidgetItem(cols[2]));
         }
     }
 }
@@ -155,13 +184,16 @@ void MainWindow::onUploadClicked() {
 }
 
 void MainWindow::onDownloadClicked() {
-    int row = fileTable->currentRow();
+    // Lấy table hiện tại dựa vào tab
+    QTableWidget* currentTable = (tabWidget->currentIndex() == 0) ? fileTable : sharedFileTable;
+    
+    int row = currentTable->currentRow();
     if (row < 0) {
         QMessageBox::warning(this, "Download", "Please select a file first!");
         return;
     }
     
-    QString filename = fileTable->item(row, 0)->text();
+    QString filename = currentTable->item(row, 0)->text();
     
     // Cho phép người dùng chọn nơi lưu file
     QString savePath = QFileDialog::getSaveFileName(this, 
@@ -184,6 +216,12 @@ void MainWindow::handleDownloadComplete(QString filename) {
 }
 
 void MainWindow::onShareClicked() {
+    // Chỉ share được file trong "My Files"
+    if (tabWidget->currentIndex() != 0) {
+        QMessageBox::warning(this, "Share", "You can only share files from 'My Files' tab!");
+        return;
+    }
+    
     int row = fileTable->currentRow();
     if (row < 0) {
         QMessageBox::warning(this, "Share", "Please select a file first!");
@@ -191,7 +229,6 @@ void MainWindow::onShareClicked() {
     }
     
     QString filename = fileTable->item(row, 0)->text();
-    QString owner = fileTable->item(row, 2)->text();
     
     // Hiển thị dialog nhập username
     bool ok;
@@ -212,6 +249,12 @@ void MainWindow::handleShareResult(bool success, QString msg) {
 }
 
 void MainWindow::onDeleteClicked() {
+    // Chỉ xóa được file trong "My Files"
+    if (tabWidget->currentIndex() != 0) {
+        QMessageBox::warning(this, "Delete", "You can only delete files from 'My Files' tab!");
+        return;
+    }
+    
     int row = fileTable->currentRow();
     if (row < 0) {
         QMessageBox::warning(this, "Delete", "Please select a file first!");
@@ -219,7 +262,6 @@ void MainWindow::onDeleteClicked() {
     }
     
     QString filename = fileTable->item(row, 0)->text();
-    QString owner = fileTable->item(row, 2)->text();
     
     // Xác nhận xóa
     auto reply = QMessageBox::question(this, "Delete File",
@@ -250,8 +292,12 @@ void MainWindow::onLogoutClicked() {
 }
 
 void MainWindow::handleLogout() {
-    // Xóa dữ liệu bảng
+    // Xóa dữ liệu cả 2 bảng
     fileTable->setRowCount(0);
+    sharedFileTable->setRowCount(0);
+    
+    // Chuyển về tab đầu tiên
+    tabWidget->setCurrentIndex(0);
     
     // Chuyển về trang Login
     stackedWidget->setCurrentIndex(0);

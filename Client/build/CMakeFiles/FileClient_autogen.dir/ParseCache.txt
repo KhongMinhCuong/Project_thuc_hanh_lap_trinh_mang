@@ -804,6 +804,7 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QStackedWidget
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTabWidget
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTableWidget
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractbutton.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractitemdelegate.h

@@ -17,6 +17,7 @@ public:
 class CmdHandler {
 public:
     static std::string handleList(const ClientSession& session);
+    static std::string handleListShared(const ClientSession& session);
     static std::string handleSearch(const ClientSession& session, const std::string& keyword);
     static std::string handleShare(const ClientSession& session, const std::string& filename, const std::string& targetUser);
     static std::string handleDelete(const ClientSession& session, const std::string& filename);

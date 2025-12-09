@@ -26,7 +26,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_NetworkManager_t {
-    uint offsetsAndSizes[28];
+    uint offsetsAndSizes[34];
     char stringdata0[15];
     char stringdata1[17];
     char stringdata2[1];
@@ -41,6 +41,9 @@ struct qt_meta_stringdata_NetworkManager_t {
     char stringdata11[17];
     char stringdata12[9];
     char stringdata13[12];
+    char stringdata14[13];
+    char stringdata15[14];
+    char stringdata16[12];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_NetworkManager_t::offsetsAndSizes) + ofs), len 
@@ -59,7 +62,10 @@ Q_CONSTINIT static const qt_meta_stringdata_NetworkManager_t qt_meta_stringdata_
         QT_MOC_LITERAL(106, 14),  // "uploadProgress"
         QT_MOC_LITERAL(121, 16),  // "downloadComplete"
         QT_MOC_LITERAL(138, 8),  // "filename"
-        QT_MOC_LITERAL(147, 11)   // "onReadyRead"
+        QT_MOC_LITERAL(147, 11),  // "shareResult"
+        QT_MOC_LITERAL(159, 12),  // "deleteResult"
+        QT_MOC_LITERAL(172, 13),  // "logoutSuccess"
+        QT_MOC_LITERAL(186, 11)   // "onReadyRead"
     },
     "NetworkManager",
     "connectionStatus",
@@ -74,6 +80,9 @@ Q_CONSTINIT static const qt_meta_stringdata_NetworkManager_t qt_meta_stringdata_
     "uploadProgress",
     "downloadComplete",
     "filename",
+    "shareResult",
+    "deleteResult",
+    "logoutSuccess",
     "onReadyRead"
 };
 #undef QT_MOC_LITERAL
@@ -85,23 +94,26 @@ Q_CONSTINIT static const uint qt_meta_data_NetworkManager[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       6,       // signalCount
+       9,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    2,   56,    2, 0x06,    1 /* Public */,
-       5,    0,   61,    2, 0x06,    4 /* Public */,
-       6,    1,   62,    2, 0x06,    5 /* Public */,
-       8,    1,   65,    2, 0x06,    7 /* Public */,
-      10,    1,   68,    2, 0x06,    9 /* Public */,
-      11,    1,   71,    2, 0x06,   11 /* Public */,
+       1,    2,   74,    2, 0x06,    1 /* Public */,
+       5,    0,   79,    2, 0x06,    4 /* Public */,
+       6,    1,   80,    2, 0x06,    5 /* Public */,
+       8,    1,   83,    2, 0x06,    7 /* Public */,
+      10,    1,   86,    2, 0x06,    9 /* Public */,
+      11,    1,   89,    2, 0x06,   11 /* Public */,
+      13,    2,   92,    2, 0x06,   13 /* Public */,
+      14,    2,   97,    2, 0x06,   16 /* Public */,
+      15,    0,  102,    2, 0x06,   19 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      13,    0,   74,    2, 0x08,   13 /* Private */,
+      16,    0,  103,    2, 0x08,   20 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Bool, QMetaType::QString,    3,    4,
@@ -110,6 +122,9 @@ Q_CONSTINIT static const uint qt_meta_data_NetworkManager[] = {
     QMetaType::Void, QMetaType::QString,    9,
     QMetaType::Void, QMetaType::QString,    4,
     QMetaType::Void, QMetaType::QString,   12,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString,    3,    4,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString,    3,    4,
+    QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
@@ -144,6 +159,16 @@ Q_CONSTINIT const QMetaObject NetworkManager::staticMetaObject = { {
         // method 'downloadComplete'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'shareResult'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'deleteResult'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'logoutSuccess'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onReadyRead'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
@@ -162,7 +187,10 @@ void NetworkManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 3: _t->fileListReceived((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 4: _t->uploadProgress((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 5: _t->downloadComplete((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 6: _t->onReadyRead(); break;
+        case 6: _t->shareResult((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 7: _t->deleteResult((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 8: _t->logoutSuccess(); break;
+        case 9: _t->onReadyRead(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -209,6 +237,27 @@ void NetworkManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
                 return;
             }
         }
+        {
+            using _t = void (NetworkManager::*)(bool , QString );
+            if (_t _q_method = &NetworkManager::shareResult; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 6;
+                return;
+            }
+        }
+        {
+            using _t = void (NetworkManager::*)(bool , QString );
+            if (_t _q_method = &NetworkManager::deleteResult; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 7;
+                return;
+            }
+        }
+        {
+            using _t = void (NetworkManager::*)();
+            if (_t _q_method = &NetworkManager::logoutSuccess; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 8;
+                return;
+            }
+        }
     }
 }
 
@@ -231,13 +280,13 @@ int NetworkManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 10)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 7;
+        _id -= 10;
     }
     return _id;
 }
@@ -281,6 +330,26 @@ void NetworkManager::downloadComplete(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);
+}
+
+// SIGNAL 6
+void NetworkManager::shareResult(bool _t1, QString _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
+}
+
+// SIGNAL 7
+void NetworkManager::deleteResult(bool _t1, QString _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    QMetaObject::activate(this, &staticMetaObject, 7, _a);
+}
+
+// SIGNAL 8
+void NetworkManager::logoutSuccess()
+{
+    QMetaObject::activate(this, &staticMetaObject, 8, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

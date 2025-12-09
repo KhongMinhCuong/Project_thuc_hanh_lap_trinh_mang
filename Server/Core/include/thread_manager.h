@@ -17,6 +17,7 @@ public:
     void addClient(int socketFd, const ClientSession& session);  // Khôi phục session
     void run(); 
     void stop();
+    int getConnectionCount() const { return client_sockets.size(); }
 
 private:
     void handleClientMessage(int fd);
@@ -30,6 +31,7 @@ private:
     std::mutex mtx;
     std::atomic<bool> running;
     int epoll_fd;  // epoll file descriptor
+    std::thread::id myThreadId;  // Lưu thread ID thực tế của worker này
 };
 
 // Class xử lý riêng (Dedicated)
@@ -42,12 +44,21 @@ public:
 // Class chấp nhận kết nối (Acceptor)
 class AcceptorThread {
 public:
-    AcceptorThread(int port, WorkerThread& worker);
+    AcceptorThread(int port);
     void run();
+    void stop();
 private:
     int server_fd;
     int port;
-    WorkerThread& workerRef;
+    std::atomic<bool> running{true};
+    
+    // Worker Thread Pool (fixed size)
+    std::vector<std::unique_ptr<WorkerThread>> workerPool;
+    std::vector<std::thread> workerThreads;
+    std::mutex poolMutex;
+    
+    void createWorkerPool();  // Tạo pool cố định
+    WorkerThread* selectLeastLoadedWorker();  // Chọn worker ít kết nối nhất
 };
 
 #endif // THREAD_MANAGER_H

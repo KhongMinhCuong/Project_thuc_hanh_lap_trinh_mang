@@ -11,7 +11,8 @@ public:
     explicit NetworkManager(QObject *parent = nullptr);
     void connectToServer(const QString &host, quint16 port);
     void login(const QString &username, const QString &password);
-    void requestFileList(); // Gửi lệnh LIST
+    void requestFileList(); // Gửi lệnh LIST (my files)
+    void requestSharedFileList(); // Gửi lệnh LISTSHARED (shared files)
     void uploadFile(const QString &filePath); // Upload file
     void downloadFile(const QString &filename, const QString &savePath); // Download file
     void shareFile(const QString &filename, const QString &targetUser); // Share file

@@ -185,6 +185,7 @@ CMakeFiles/FileServer.dir/Core/src/thread/WorkerThread.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/in.h \
  /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/src/thread/../../include/request_handler.h \
  /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/src/thread/../../include/thread_monitor.h \
+ /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/src/thread/../../include/server_config.h \
  /usr/include/c++/13/chrono /usr/include/c++/13/set \
  /usr/include/c++/13/bits/stl_set.h \
  /usr/include/c++/13/bits/stl_multiset.h /usr/include/c++/13/iostream \

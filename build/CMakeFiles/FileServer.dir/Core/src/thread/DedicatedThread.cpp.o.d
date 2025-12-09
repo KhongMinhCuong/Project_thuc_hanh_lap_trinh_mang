@@ -195,6 +195,7 @@ CMakeFiles/FileServer.dir/Core/src/thread/DedicatedThread.cpp.o: \
  /usr/include/mysql/mysql_version.h /usr/include/mysql/mysql_time.h \
  /usr/include/mysql/errmsg.h \
  /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/src/thread/../../include/thread_monitor.h \
+ /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/src/thread/../../include/server_config.h \
  /usr/include/c++/13/chrono /usr/include/c++/13/set \
  /usr/include/c++/13/bits/stl_set.h \
  /usr/include/c++/13/bits/stl_multiset.h /usr/include/c++/13/iostream \
@@ -214,6 +215,7 @@ CMakeFiles/FileServer.dir/Core/src/thread/DedicatedThread.cpp.o: \
  /usr/include/c++/13/bits/basic_ios.tcc \
  /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
  /usr/include/c++/13/bits/istream.tcc \
+ /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/src/thread/../../include/server_config.h \
  /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/src/thread/../../../../Common/Protocol.h \
  /usr/include/c++/13/fstream /usr/include/c++/13/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \

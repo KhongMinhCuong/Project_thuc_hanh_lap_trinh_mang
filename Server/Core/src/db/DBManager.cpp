@@ -83,13 +83,12 @@ std::vector<FileRecord> DBManager::getFiles(std::string username) {
     std::string user_id = row[0];
     mysql_free_result(result);
 
-    // Lấy files của user (owned + shared), loại trừ ROOT folder
-    query = "SELECT DISTINCT f.name, f.size_bytes, u.username, f.created_at "
+    // Lấy CHỈ files do user sở hữu (không bao gồm shared)
+    query = "SELECT f.name, f.size_bytes, u.username, f.created_at "
             "FROM FILES f "
             "JOIN USERS u ON f.owner_id = u.user_id "
             "WHERE f.file_id != 1 "
-            "AND (f.owner_id = " + user_id + " OR f.file_id IN "
-            "(SELECT file_id FROM SHAREDFILES WHERE user_id = " + user_id + ")) "
+            "AND f.owner_id = " + user_id + " "
             "AND f.is_deleted = FALSE AND f.is_folder = FALSE "
             "ORDER BY f.created_at DESC";
 
@@ -111,6 +110,56 @@ std::vector<FileRecord> DBManager::getFiles(std::string username) {
 
     mysql_free_result(result);
     std::cout << "[DB] Retrieved " << list.size() << " files for user '" << username << "'" << std::endl;
+    return list;
+}
+
+std::vector<FileRecord> DBManager::getSharedFiles(std::string username) {
+    std::vector<FileRecord> list;
+    if (!conn) return list;
+
+    // Lấy user_id
+    std::string query = "SELECT user_id FROM USERS WHERE username = '" + username + "'";
+    if (mysql_query(conn, query.c_str())) return list;
+    
+    MYSQL_RES* result = mysql_store_result(conn);
+    if (!result) return list;
+    
+    MYSQL_ROW row = mysql_fetch_row(result);
+    if (!row) {
+        mysql_free_result(result);
+        return list;
+    }
+    std::string user_id = row[0];
+    mysql_free_result(result);
+
+    // Lấy CHỈ file được share (không bao gồm file của mình)
+    query = "SELECT f.name, f.size_bytes, u.username "
+            "FROM FILES f "
+            "JOIN USERS u ON f.owner_id = u.user_id "
+            "JOIN SHAREDFILES sf ON f.file_id = sf.file_id "
+            "WHERE sf.user_id = " + user_id + " "
+            "AND f.owner_id != " + user_id + " "
+            "AND f.is_deleted = FALSE AND f.is_folder = FALSE "
+            "ORDER BY sf.shared_at DESC";
+
+    if (mysql_query(conn, query.c_str())) {
+        std::cerr << "[DB] Query failed: " << mysql_error(conn) << std::endl;
+        return list;
+    }
+
+    result = mysql_store_result(conn);
+    if (!result) return list;
+
+    while ((row = mysql_fetch_row(result))) {
+        FileRecord rec;
+        rec.name = row[0] ? row[0] : "";
+        rec.size = row[1] ? std::stol(row[1]) : 0;
+        rec.owner = row[2] ? row[2] : "";
+        list.push_back(rec);
+    }
+
+    mysql_free_result(result);
+    std::cout << "[DB] Retrieved " << list.size() << " shared files for user '" << username << "'" << std::endl;
     return list;
 }
 

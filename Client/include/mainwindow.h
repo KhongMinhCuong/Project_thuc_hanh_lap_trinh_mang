@@ -5,6 +5,7 @@
 #include <QStackedWidget>
 #include <QLineEdit>
 #include <QTableWidget>
+#include <QTabWidget>
 #include <QPushButton>
 #include "network_manager.h"
 
@@ -24,6 +25,7 @@ private slots:
     void onShareClicked();   // Nút share file
     void onDeleteClicked();  // Nút xóa file
     void onLogoutClicked();  // Nút đăng xuất
+    void onTabChanged(int index);  // Chuyển tab
     
     // Slots nhận tín hiệu từ NetworkManager
     void handleLoginSuccess();
@@ -48,7 +50,9 @@ private:
     QLineEdit *passInput;
     
     // UI Elements Dashboard
-    QTableWidget *fileTable;
+    QTabWidget *tabWidget;
+    QTableWidget *fileTable;        // My Files
+    QTableWidget *sharedFileTable;  // Shared Files
 };
 
 #endif // MAINWINDOW_H

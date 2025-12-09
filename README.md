@@ -126,4 +126,3 @@ cd build_client
 - Database hiện đang sử dụng **mock data** trong `DBManager.cpp`
 - Để kết nối MySQL thực, cần cập nhật code trong `Server/Core/src/db/DBManager.cpp`
 - File `schema.sql` hiện đang trống, cần được định nghĩa khi triển khai database thật
-# Project_thuc_hanh_lap_trinh_mang

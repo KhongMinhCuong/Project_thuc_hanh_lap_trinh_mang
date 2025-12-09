@@ -39,7 +39,7 @@ void WorkerThread::addClient(int socketFd) {
     sessions[socketFd].socketFd = socketFd;
     
     // Báo cáo cho Monitor
-    ThreadMonitor::getInstance().reportConnectionCount(client_sockets.size());
+    ThreadMonitor::getInstance().reportConnectionCount(myThreadId, client_sockets.size());
     
     std::cout << "[Worker] Client added. FD: " << socketFd 
               << " (Total: " << client_sockets.size() << ")" << std::endl;
@@ -62,7 +62,7 @@ void WorkerThread::addClient(int socketFd, const ClientSession& session) {
     sessions[socketFd] = session;  // Khôi phục session cũ
     
     // Báo cáo cho Monitor
-    ThreadMonitor::getInstance().reportConnectionCount(client_sockets.size());
+    ThreadMonitor::getInstance().reportConnectionCount(myThreadId, client_sockets.size());
     
     std::cout << "[Worker] Client restored. FD: " << socketFd 
               << " User: " << session.username
@@ -86,7 +86,7 @@ void WorkerThread::removeClient(int fd, bool closeSocket) {
     sessions.erase(fd);
     
     // 4. Báo cáo cho Monitor
-    ThreadMonitor::getInstance().reportConnectionCount(client_sockets.size());
+    ThreadMonitor::getInstance().reportConnectionCount(myThreadId, client_sockets.size());
 
     // 5. Xử lý socket
     if (closeSocket) {
@@ -99,6 +99,10 @@ void WorkerThread::removeClient(int fd, bool closeSocket) {
 }
 
 void WorkerThread::run() {
+    // Đăng ký thread ID thực tế khi worker bắt đầu chạy
+    myThreadId = std::this_thread::get_id();
+    ThreadMonitor::getInstance().registerWorkerThread(this, myThreadId);
+    
     std::cout << "[Worker] Started event loop with epoll (I/O Multiplexing)." << std::endl;
     
     const int MAX_EVENTS = 50;  // Xử lý tối đa 50 events mỗi lần
@@ -205,6 +209,10 @@ void WorkerThread::handleClientMessage(int fd) {
     else if (command == CMD_LIST) {
         std::lock_guard<std::mutex> lock(mtx);
         response = CmdHandler::handleList(sessions[fd]);
+    }
+    else if (command == CMD_LISTSHARED) {
+        std::lock_guard<std::mutex> lock(mtx);
+        response = CmdHandler::handleListShared(sessions[fd]);
     }
     else if (command == CMD_SEARCH) {
         std::lock_guard<std::mutex> lock(mtx);

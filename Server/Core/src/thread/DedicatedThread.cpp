@@ -1,6 +1,7 @@
 #include "../../include/thread_manager.h"
 #include "../../include/db_manager.h"
 #include "../../include/thread_monitor.h"
+#include "../../include/server_config.h"
 #include "../../../../Common/Protocol.h"
 #include <iostream>
 #include <fstream>
@@ -8,8 +9,8 @@
 #include <unistd.h>
 #include <sys/socket.h>
 
-#define BUFFER_SIZE 4096
-#define STORAGE_PATH "/home/cuong/DuAnPMCSF/File_Management_App/Server/storage/"
+#define BUFFER_SIZE ServerConfig::BUFFER_SIZE
+#define STORAGE_PATH ServerConfig::STORAGE_PATH
 
 // --- XỞ LÝ UPLOAD (Client gửi lên Server) ---
 void DedicatedThread::handleUpload(int socketFd, std::string filename, long filesize, std::string username, WorkerThread* workerRef) {

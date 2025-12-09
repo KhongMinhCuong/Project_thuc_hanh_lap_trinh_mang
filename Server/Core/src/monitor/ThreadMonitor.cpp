@@ -46,8 +46,19 @@ void ThreadMonitor::reportDedicatedThreadEnd() {
     finishedThreadIds.insert(std::this_thread::get_id());
 }
 
-void ThreadMonitor::reportConnectionCount(int count) {
-    stats.totalConnections.store(count);
+void ThreadMonitor::reportConnectionCount(std::thread::id workerId, int count) {
+    std::lock_guard<std::mutex> lock(poolMutex);
+    workerConnections[workerId] = count;
+    
+    // Tính tổng connections từ tất cả workers
+    int total = 0;
+    std::cout << "[Monitor] Connection report - Worker " << workerId << ": " << count << " connections" << std::endl;
+    for (const auto& pair : workerConnections) {
+        std::cout << "  Worker " << pair.first << " has " << pair.second << " connections" << std::endl;
+        total += pair.second;
+    }
+    std::cout << "[Monitor] Total connections: " << total << std::endl;
+    stats.totalConnections.store(total);
 }
 
 void ThreadMonitor::reportBytesTransferred(long long bytes) {
@@ -64,35 +75,11 @@ void ThreadMonitor::printStats() {
     std::cout << "==================================\n" << std::endl;
 }
 
-bool ThreadMonitor::shouldCreateWorkerThread() {
-    int workers = stats.activeWorkerThreads.load();
-    int connections = stats.totalConnections.load();
-    
-    // Nếu trung bình mỗi worker xử lý > 30 connections, cần thêm worker
-    if (workers > 0 && connections / workers > 30 && workers < MAX_WORKER_THREADS) {
-        return true;
-    }
-    return false;
-}
-
-bool ThreadMonitor::isSystemOverloaded() {
-    int dedicated = stats.activeDedicatedThreads.load();
-    int workers = stats.activeWorkerThreads.load();
-    
-    // Hệ thống quá tải nếu:
-    // - Quá nhiều dedicated threads (file I/O)
-    // - Hoặc quá nhiều worker threads
-    if (dedicated > MAX_DEDICATED_THREADS || workers > MAX_WORKER_THREADS) {
-        return true;
-    }
-    return false;
-}
-
 bool ThreadMonitor::canCreateDedicatedThread() {
     int dedicated = stats.activeDedicatedThreads.load();
     
     if (dedicated >= MAX_DEDICATED_THREADS) {
-        std::cout << "[Monitor] ⚠️  Cannot create DedicatedThread: limit reached (" 
+        std::cout << "[Monitor]  Cannot create DedicatedThread: limit reached (" 
                   << dedicated << "/" << MAX_DEDICATED_THREADS << ")" << std::endl;
         return false;
     }
@@ -119,24 +106,6 @@ void ThreadMonitor::monitorLoop() {
             lastPrintTime = now;
         }
         
-        // Kiểm tra có cần cảnh báo
-        if (isSystemOverloaded()) {
-            std::cout << "[Monitor] ⚠️  WARNING: System overloaded!" << std::endl;
-        }
-        
-        if (shouldCreateWorkerThread()) {
-            std::cout << "[Monitor] 💡 Suggestion: Consider creating more worker threads" 
-                      << std::endl;
-        }
-        
-        // Kiểm tra các thread có đang idle không
-        int workers = stats.activeWorkerThreads.load();
-        int connections = stats.totalConnections.load();
-        if (workers > 2 && connections < workers * 5) {
-            std::cout << "[Monitor] 💡 Info: Some worker threads may be idle (low load)" 
-                      << std::endl;
-        }
-        
         // Cleanup các dedicated thread đã hoàn thành
         cleanupFinishedThreads();
     }
@@ -146,6 +115,7 @@ void ThreadMonitor::monitorLoop() {
 void ThreadMonitor::registerWorkerThread(WorkerThread* worker, std::thread::id threadId) {
     std::lock_guard<std::mutex> lock(poolMutex);
     workerPool[threadId] = worker;
+    workerConnections[threadId] = 0;  // Khởi tạo count = 0 cho worker mới
     reportWorkerThreadStart();
     std::cout << "[Monitor] Worker thread registered. ID: " << threadId << std::endl;
 }
@@ -153,6 +123,7 @@ void ThreadMonitor::registerWorkerThread(WorkerThread* worker, std::thread::id t
 void ThreadMonitor::unregisterWorkerThread(std::thread::id threadId) {
     std::lock_guard<std::mutex> lock(poolMutex);
     workerPool.erase(threadId);
+    workerConnections.erase(threadId);  // Xóa entry khỏi map
     reportWorkerThreadEnd();
     std::cout << "[Monitor] Worker thread unregistered. ID: " << threadId << std::endl;
 }

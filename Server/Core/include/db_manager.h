@@ -23,6 +23,7 @@ public:
     void disconnect();
     bool checkUser(std::string user, std::string pass);
     std::vector<FileRecord> getFiles(std::string username);
+    std::vector<FileRecord> getSharedFiles(std::string username);
     bool addFile(std::string filename, long filesize, std::string owner);
     long getStorageUsed(std::string username);
     bool shareFile(std::string filename, std::string ownerUsername, std::string targetUsername);

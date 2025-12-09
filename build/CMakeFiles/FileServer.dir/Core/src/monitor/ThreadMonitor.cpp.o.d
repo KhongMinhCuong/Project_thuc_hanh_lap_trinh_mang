@@ -2,6 +2,7 @@ CMakeFiles/FileServer.dir/Core/src/monitor/ThreadMonitor.cpp.o: \
  /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/src/monitor/ThreadMonitor.cpp \
  /usr/include/stdc-predef.h \
  /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/include/thread_monitor.h \
+ /home/cuong/DuAnPMCSF/File_Management_App/Server/Core/include/server_config.h \
  /usr/include/c++/13/thread /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \

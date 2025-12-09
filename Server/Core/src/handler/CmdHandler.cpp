@@ -21,6 +21,25 @@ std::string CmdHandler::handleList(const ClientSession& session) {
     return response;
 }
 
+std::string CmdHandler::handleListShared(const ClientSession& session) {
+    if (!session.isAuthenticated) {
+        return std::string(CODE_FAIL) + " Please login first\n";
+    }
+
+    auto files = DBManager::getInstance().getSharedFiles(session.username);
+    
+    if (files.empty()) {
+        return "210 No shared files\n";
+    }
+
+    std::string response = "";
+    // Format: Tên|Size|Người share
+    for (const auto& f : files) {
+        response += f.name + "|" + std::to_string(f.size) + "|" + f.owner + "\n";
+    }
+    return response;
+}
+
 std::string CmdHandler::handleSearch(const ClientSession& session, const std::string& keyword) {
     if (!session.isAuthenticated) return std::string(CODE_FAIL) + " Please login first\n";
 

@@ -46,6 +46,13 @@ void NetworkManager::requestFileList() {
     socket->flush();
 }
 
+void NetworkManager::requestSharedFileList() {
+    qDebug() << "[Network] Requesting shared file list...";
+    QString cmd = QString("%1\n").arg(CMD_LISTSHARED);
+    socket->write(cmd.toUtf8());
+    socket->flush();
+}
+
 void NetworkManager::uploadFile(const QString &filePath) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
