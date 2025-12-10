@@ -66,10 +66,10 @@ include CMakeFiles/FileClient_autogen_timestamp_deps.dir/compiler_depend.make
 # Include the progress variables for this target.
 include CMakeFiles/FileClient_autogen_timestamp_deps.dir/progress.make
 
-CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Network.so.6.4.2
 CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/qt6/libexec/uic
-CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Widgets.so.6.4.2
 CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/qt6/libexec/moc
+CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Widgets.so.6.4.2
+CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Network.so.6.4.2
 
 FileClient_autogen_timestamp_deps: CMakeFiles/FileClient_autogen_timestamp_deps
 FileClient_autogen_timestamp_deps: CMakeFiles/FileClient_autogen_timestamp_deps.dir/build.make

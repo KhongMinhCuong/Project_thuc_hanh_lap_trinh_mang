@@ -1,4 +1,5 @@
 #include "../../include/db_manager.h"
+#include "../../include/db_config.h"
 #include <iostream>
 #include <sstream>
 #include <openssl/sha.h>
@@ -23,13 +24,13 @@ bool DBManager::connect() {
         return false;
     }
 
-    if (!mysql_real_connect(conn, "localhost", "cuong", "040424", 
-                            "file_management", 0, nullptr, 0)) {
+    if (!mysql_real_connect(conn, DB_HOST, DB_USER, DB_PASS, 
+                            DB_NAME, DB_PORT, nullptr, 0)) {
         std::cerr << "[DB] Connection failed: " << mysql_error(conn) << std::endl;
         return false;
     }
 
-    std::cout << "[DB] Connected to MySQL database 'file_management'" << std::endl;
+    std::cout << "[DB] Connected to MySQL database '" << DB_NAME << "'" << std::endl;
     return true;
 }
 

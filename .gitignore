@@ -1,0 +1,32 @@
+# Database config (contains sensitive credentials)
+Server/Core/include/db_config.h
+
+# Build directories
+build/
+build_client/
+Client/build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Compiled files
+*.o
+*.exe
+*.out
+FileServer
+FileClient
+
+# Qt generated
+*_autogen/
+moc_*.cpp
+ui_*.h
+
+# Storage (uploaded files)
+Server/storage/*
+!Server/storage/.gitkeep
+
+# Logs
+*.log
