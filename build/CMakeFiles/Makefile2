@@ -84,12 +84,12 @@ CMakeFiles/FileClient.dir/all: CMakeFiles/FileClient_autogen_timestamp_deps.dir/
 CMakeFiles/FileClient.dir/all: CMakeFiles/FileClient_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FileClient.dir/build.make CMakeFiles/FileClient.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FileClient.dir/build.make CMakeFiles/FileClient.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/c/Users/Admin/Documents/THLTM/Project_thuc_hanh_lap_trinh_mang/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target FileClient"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/c/Users/Admin/Documents/THLTM/Project_thuc_hanh_lap_trinh_mang/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target FileClient"
 .PHONY : CMakeFiles/FileClient.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/FileClient.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Admin/Documents/THLTM/Project_thuc_hanh_lap_trinh_mang/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Admin/Documents/THLTM/Project_thuc_hanh_lap_trinh_mang/build/CMakeFiles 8
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/FileClient.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Admin/Documents/THLTM/Project_thuc_hanh_lap_trinh_mang/build/CMakeFiles 0
 .PHONY : CMakeFiles/FileClient.dir/rule
@@ -136,7 +136,7 @@ CMakeFiles/FileClient_autogen_timestamp_deps.dir/clean:
 CMakeFiles/FileClient_autogen.dir/all: CMakeFiles/FileClient_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FileClient_autogen.dir/build.make CMakeFiles/FileClient_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FileClient_autogen.dir/build.make CMakeFiles/FileClient_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/c/Users/Admin/Documents/THLTM/Project_thuc_hanh_lap_trinh_mang/build/CMakeFiles --progress-num=7 "Built target FileClient_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/c/Users/Admin/Documents/THLTM/Project_thuc_hanh_lap_trinh_mang/build/CMakeFiles --progress-num=8 "Built target FileClient_autogen"
 .PHONY : CMakeFiles/FileClient_autogen.dir/all
 
 # Build rule for subdir invocation for target.

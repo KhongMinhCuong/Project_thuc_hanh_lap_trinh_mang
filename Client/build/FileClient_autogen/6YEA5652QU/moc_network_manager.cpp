@@ -27,7 +27,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_NetworkManager_t {
-    uint offsetsAndSizes[70];
+    uint offsetsAndSizes[74];
     char stringdata0[15];
     char stringdata1[17];
     char stringdata2[1];
@@ -46,23 +46,25 @@ struct qt_meta_stringdata_NetworkManager_t {
     char stringdata15[17];
     char stringdata16[8];
     char stringdata17[6];
-    char stringdata18[24];
-    char stringdata19[10];
-    char stringdata20[20];
-    char stringdata21[10];
-    char stringdata22[21];
-    char stringdata23[11];
-    char stringdata24[12];
-    char stringdata25[6];
-    char stringdata26[19];
-    char stringdata27[10];
-    char stringdata28[21];
-    char stringdata29[18];
-    char stringdata30[6];
-    char stringdata31[20];
-    char stringdata32[11];
-    char stringdata33[7];
-    char stringdata34[12];
+    char stringdata18[14];
+    char stringdata19[8];
+    char stringdata20[10];
+    char stringdata21[24];
+    char stringdata22[20];
+    char stringdata23[10];
+    char stringdata24[21];
+    char stringdata25[11];
+    char stringdata26[12];
+    char stringdata27[6];
+    char stringdata28[19];
+    char stringdata29[10];
+    char stringdata30[21];
+    char stringdata31[18];
+    char stringdata32[6];
+    char stringdata33[20];
+    char stringdata34[11];
+    char stringdata35[7];
+    char stringdata36[12];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_NetworkManager_t::offsetsAndSizes) + ofs), len 
@@ -86,23 +88,25 @@ Q_CONSTINIT static const qt_meta_stringdata_NetworkManager_t qt_meta_stringdata_
         QT_MOC_LITERAL(172, 16),  // "transferProgress"
         QT_MOC_LITERAL(189, 7),  // "current"
         QT_MOC_LITERAL(197, 5),  // "total"
-        QT_MOC_LITERAL(203, 23),  // "folderStructureReceived"
-        QT_MOC_LITERAL(227, 9),  // "folder_id"
-        QT_MOC_LITERAL(237, 19),  // "QList<FileNodeInfo>"
-        QT_MOC_LITERAL(257, 9),  // "structure"
-        QT_MOC_LITERAL(267, 20),  // "folderShareInitiated"
-        QT_MOC_LITERAL(288, 10),  // "session_id"
-        QT_MOC_LITERAL(299, 11),  // "total_files"
-        QT_MOC_LITERAL(311, 5),  // "files"
-        QT_MOC_LITERAL(317, 18),  // "folderFileUploaded"
-        QT_MOC_LITERAL(336, 9),  // "completed"
-        QT_MOC_LITERAL(346, 20),  // "folderShareCompleted"
-        QT_MOC_LITERAL(367, 17),  // "folderShareFailed"
-        QT_MOC_LITERAL(385, 5),  // "error"
-        QT_MOC_LITERAL(391, 19),  // "folderShareProgress"
-        QT_MOC_LITERAL(411, 10),  // "percentage"
-        QT_MOC_LITERAL(422, 6),  // "status"
-        QT_MOC_LITERAL(429, 11)   // "onReadyRead"
+        QT_MOC_LITERAL(203, 13),  // "folderCreated"
+        QT_MOC_LITERAL(217, 7),  // "message"
+        QT_MOC_LITERAL(225, 9),  // "folder_id"
+        QT_MOC_LITERAL(235, 23),  // "folderStructureReceived"
+        QT_MOC_LITERAL(259, 19),  // "QList<FileNodeInfo>"
+        QT_MOC_LITERAL(279, 9),  // "structure"
+        QT_MOC_LITERAL(289, 20),  // "folderShareInitiated"
+        QT_MOC_LITERAL(310, 10),  // "session_id"
+        QT_MOC_LITERAL(321, 11),  // "total_files"
+        QT_MOC_LITERAL(333, 5),  // "files"
+        QT_MOC_LITERAL(339, 18),  // "folderFileUploaded"
+        QT_MOC_LITERAL(358, 9),  // "completed"
+        QT_MOC_LITERAL(368, 20),  // "folderShareCompleted"
+        QT_MOC_LITERAL(389, 17),  // "folderShareFailed"
+        QT_MOC_LITERAL(407, 5),  // "error"
+        QT_MOC_LITERAL(413, 19),  // "folderShareProgress"
+        QT_MOC_LITERAL(433, 10),  // "percentage"
+        QT_MOC_LITERAL(444, 6),  // "status"
+        QT_MOC_LITERAL(451, 11)   // "onReadyRead"
     },
     "NetworkManager",
     "connectionStatus",
@@ -122,8 +126,10 @@ Q_CONSTINIT static const qt_meta_stringdata_NetworkManager_t qt_meta_stringdata_
     "transferProgress",
     "current",
     "total",
-    "folderStructureReceived",
+    "folderCreated",
+    "message",
     "folder_id",
+    "folderStructureReceived",
     "QList<FileNodeInfo>",
     "structure",
     "folderShareInitiated",
@@ -149,33 +155,34 @@ Q_CONSTINIT static const uint qt_meta_data_NetworkManager[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-      16,       // signalCount
+      17,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    2,  116,    2, 0x06,    1 /* Public */,
-       5,    0,  121,    2, 0x06,    4 /* Public */,
-       6,    1,  122,    2, 0x06,    5 /* Public */,
-       7,    1,  125,    2, 0x06,    7 /* Public */,
-       9,    1,  128,    2, 0x06,    9 /* Public */,
-      10,    1,  131,    2, 0x06,   11 /* Public */,
-      12,    2,  134,    2, 0x06,   13 /* Public */,
-      13,    2,  139,    2, 0x06,   16 /* Public */,
-      14,    0,  144,    2, 0x06,   19 /* Public */,
-      15,    2,  145,    2, 0x06,   20 /* Public */,
-      18,    2,  150,    2, 0x06,   23 /* Public */,
-      22,    3,  155,    2, 0x06,   26 /* Public */,
-      26,    2,  162,    2, 0x06,   30 /* Public */,
-      28,    1,  167,    2, 0x06,   33 /* Public */,
-      29,    1,  170,    2, 0x06,   35 /* Public */,
-      31,    2,  173,    2, 0x06,   37 /* Public */,
+       1,    2,  122,    2, 0x06,    1 /* Public */,
+       5,    0,  127,    2, 0x06,    4 /* Public */,
+       6,    1,  128,    2, 0x06,    5 /* Public */,
+       7,    1,  131,    2, 0x06,    7 /* Public */,
+       9,    1,  134,    2, 0x06,    9 /* Public */,
+      10,    1,  137,    2, 0x06,   11 /* Public */,
+      12,    2,  140,    2, 0x06,   13 /* Public */,
+      13,    2,  145,    2, 0x06,   16 /* Public */,
+      14,    0,  150,    2, 0x06,   19 /* Public */,
+      15,    2,  151,    2, 0x06,   20 /* Public */,
+      18,    3,  156,    2, 0x06,   23 /* Public */,
+      21,    2,  163,    2, 0x06,   27 /* Public */,
+      24,    3,  168,    2, 0x06,   30 /* Public */,
+      28,    2,  175,    2, 0x06,   34 /* Public */,
+      30,    1,  180,    2, 0x06,   37 /* Public */,
+      31,    1,  183,    2, 0x06,   39 /* Public */,
+      33,    2,  186,    2, 0x06,   41 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      34,    0,  178,    2, 0x08,   40 /* Private */,
+      36,    0,  191,    2, 0x08,   44 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Bool, QMetaType::QString,    3,    4,
@@ -188,12 +195,13 @@ Q_CONSTINIT static const uint qt_meta_data_NetworkManager[] = {
     QMetaType::Void, QMetaType::Bool, QMetaType::QString,    3,    4,
     QMetaType::Void,
     QMetaType::Void, QMetaType::LongLong, QMetaType::LongLong,   16,   17,
-    QMetaType::Void, QMetaType::LongLong, 0x80000000 | 20,   19,   21,
-    QMetaType::Void, QMetaType::QString, QMetaType::Int, 0x80000000 | 20,   23,   24,   25,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int,   27,   17,
-    QMetaType::Void, QMetaType::QString,   23,
-    QMetaType::Void, QMetaType::QString,   30,
-    QMetaType::Void, QMetaType::Int, QMetaType::QString,   32,   33,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString, QMetaType::LongLong,    3,   19,   20,
+    QMetaType::Void, QMetaType::LongLong, 0x80000000 | 22,   20,   23,
+    QMetaType::Void, QMetaType::QString, QMetaType::Int, 0x80000000 | 22,   25,   26,   27,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,   29,   17,
+    QMetaType::Void, QMetaType::QString,   25,
+    QMetaType::Void, QMetaType::QString,   32,
+    QMetaType::Void, QMetaType::Int, QMetaType::QString,   34,   35,
 
  // slots: parameters
     QMetaType::Void,
@@ -242,6 +250,11 @@ Q_CONSTINIT const QMetaObject NetworkManager::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<qint64, std::false_type>,
         QtPrivate::TypeAndForceComplete<qint64, std::false_type>,
+        // method 'folderCreated'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        QtPrivate::TypeAndForceComplete<long long, std::false_type>,
         // method 'folderStructureReceived'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<long long, std::false_type>,
@@ -287,13 +300,14 @@ void NetworkManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 7: _t->deleteResult((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
         case 8: _t->logoutSuccess(); break;
         case 9: _t->transferProgress((*reinterpret_cast< std::add_pointer_t<qint64>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<qint64>>(_a[2]))); break;
-        case 10: _t->folderStructureReceived((*reinterpret_cast< std::add_pointer_t<qlonglong>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QList<FileNodeInfo>>>(_a[2]))); break;
-        case 11: _t->folderShareInitiated((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QList<FileNodeInfo>>>(_a[3]))); break;
-        case 12: _t->folderFileUploaded((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 13: _t->folderShareCompleted((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 14: _t->folderShareFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 15: _t->folderShareProgress((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
-        case 16: _t->onReadyRead(); break;
+        case 10: _t->folderCreated((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<qlonglong>>(_a[3]))); break;
+        case 11: _t->folderStructureReceived((*reinterpret_cast< std::add_pointer_t<qlonglong>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QList<FileNodeInfo>>>(_a[2]))); break;
+        case 12: _t->folderShareInitiated((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QList<FileNodeInfo>>>(_a[3]))); break;
+        case 13: _t->folderFileUploaded((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 14: _t->folderShareCompleted((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 15: _t->folderShareFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 16: _t->folderShareProgress((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 17: _t->onReadyRead(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -369,44 +383,51 @@ void NetworkManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
             }
         }
         {
+            using _t = void (NetworkManager::*)(bool , QString , long long );
+            if (_t _q_method = &NetworkManager::folderCreated; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 10;
+                return;
+            }
+        }
+        {
             using _t = void (NetworkManager::*)(long long , QList<FileNodeInfo> );
             if (_t _q_method = &NetworkManager::folderStructureReceived; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
-                *result = 10;
+                *result = 11;
                 return;
             }
         }
         {
             using _t = void (NetworkManager::*)(const QString & , int , const QList<FileNodeInfo> & );
             if (_t _q_method = &NetworkManager::folderShareInitiated; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
-                *result = 11;
+                *result = 12;
                 return;
             }
         }
         {
             using _t = void (NetworkManager::*)(int , int );
             if (_t _q_method = &NetworkManager::folderFileUploaded; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
-                *result = 12;
-                return;
-            }
-        }
-        {
-            using _t = void (NetworkManager::*)(const QString & );
-            if (_t _q_method = &NetworkManager::folderShareCompleted; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 13;
                 return;
             }
         }
         {
             using _t = void (NetworkManager::*)(const QString & );
-            if (_t _q_method = &NetworkManager::folderShareFailed; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &NetworkManager::folderShareCompleted; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 14;
+                return;
+            }
+        }
+        {
+            using _t = void (NetworkManager::*)(const QString & );
+            if (_t _q_method = &NetworkManager::folderShareFailed; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 15;
                 return;
             }
         }
         {
             using _t = void (NetworkManager::*)(int , const QString & );
             if (_t _q_method = &NetworkManager::folderShareProgress; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
-                *result = 15;
+                *result = 16;
                 return;
             }
         }
@@ -432,13 +453,13 @@ int NetworkManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 18;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 17)
+        if (_id < 18)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 17;
+        _id -= 18;
     }
     return _id;
 }
@@ -512,45 +533,52 @@ void NetworkManager::transferProgress(qint64 _t1, qint64 _t2)
 }
 
 // SIGNAL 10
-void NetworkManager::folderStructureReceived(long long _t1, QList<FileNodeInfo> _t2)
+void NetworkManager::folderCreated(bool _t1, QString _t2, long long _t3)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))) };
     QMetaObject::activate(this, &staticMetaObject, 10, _a);
 }
 
 // SIGNAL 11
-void NetworkManager::folderShareInitiated(const QString & _t1, int _t2, const QList<FileNodeInfo> & _t3)
+void NetworkManager::folderStructureReceived(long long _t1, QList<FileNodeInfo> _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 11, _a);
 }
 
 // SIGNAL 12
-void NetworkManager::folderFileUploaded(int _t1, int _t2)
+void NetworkManager::folderShareInitiated(const QString & _t1, int _t2, const QList<FileNodeInfo> & _t3)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))) };
     QMetaObject::activate(this, &staticMetaObject, 12, _a);
 }
 
 // SIGNAL 13
-void NetworkManager::folderShareCompleted(const QString & _t1)
+void NetworkManager::folderFileUploaded(int _t1, int _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 13, _a);
 }
 
 // SIGNAL 14
-void NetworkManager::folderShareFailed(const QString & _t1)
+void NetworkManager::folderShareCompleted(const QString & _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 14, _a);
 }
 
 // SIGNAL 15
+void NetworkManager::folderShareFailed(const QString & _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 15, _a);
+}
+
+// SIGNAL 16
 void NetworkManager::folderShareProgress(int _t1, const QString & _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
-    QMetaObject::activate(this, &staticMetaObject, 15, _a);
+    QMetaObject::activate(this, &staticMetaObject, 16, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

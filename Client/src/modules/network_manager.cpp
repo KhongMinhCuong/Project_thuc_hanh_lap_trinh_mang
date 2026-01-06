@@ -4,7 +4,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QTimer>
-#include <QThread> // Dùng cho msleep nếu cần, hoặc để quản lý luồng
+#include <QThread>
 
 NetworkManager::NetworkManager(QObject *parent) : QObject(parent) {
     socket = new QTcpSocket(this);
@@ -25,21 +25,82 @@ void NetworkManager::connectToServer(const QString &host, quint16 port) {
     }
 }
 
-void NetworkManager::login(const QString &user, const QString &pass) {
-    if(socket->state() != QAbstractSocket::ConnectedState) return;
+// ========================================
+// THAY THẾ HÀM login() TRONG network_manager.cpp
+// ========================================
 
-    // Gửi USER
+void NetworkManager::login(const QString &user, const QString &pass) {
+    if(socket->state() != QAbstractSocket::ConnectedState) {
+        qDebug() << "[Network] Not connected to server!";
+        emit loginFailed("Not connected to server!");
+        return;
+    }
+
+    qDebug() << "[Network] Starting login process for user:" << user;
+    
+    // Disconnect readyRead để xử lý đồng bộ
+    disconnect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+    
+    // 1. Gửi USER command
     QString cmdUser = QString("%1 %2\n").arg(CMD_USER, user);
     socket->write(cmdUser.toUtf8());
     socket->flush();
-
-    // Đợi một chút để server xử lý (tránh gửi dính chùm packet nếu server xử lý chậm)
-    socket->waitForBytesWritten(100); 
     
-    // Gửi PASS
+    qDebug() << "[Network] Sent USER command";
+    
+    // 2. Đợi response "331 Password required"
+    if (!socket->waitForReadyRead(3000)) {
+        connect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+        qDebug() << "[Network] Timeout waiting for USER response";
+        emit loginFailed("Timeout: Server not responding");
+        return;
+    }
+    
+    QString userResponse = QString::fromUtf8(socket->readAll()).trimmed();
+    qDebug() << "[Network] USER response:" << userResponse;
+    
+    // Check if server is ready for password
+    if (!userResponse.startsWith("331")) {
+        connect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+        qDebug() << "[Network] Unexpected USER response:" << userResponse;
+        emit loginFailed("Unexpected server response: " + userResponse);
+        return;
+    }
+    
+    // 3. Gửi PASS command (SAU KHI NHẬN 331)
     QString cmdPass = QString("%1 %2\n").arg(CMD_PASS, pass);
     socket->write(cmdPass.toUtf8());
     socket->flush();
+    
+    qDebug() << "[Network] Sent PASS command";
+    
+    // 4. Đợi response "230 Login successful" hoặc "530 Login failed"
+    if (!socket->waitForReadyRead(3000)) {
+        connect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+        qDebug() << "[Network] Timeout waiting for PASS response";
+        emit loginFailed("Timeout: Server not responding to password");
+        return;
+    }
+    
+    QString passResponse = QString::fromUtf8(socket->readAll()).trimmed();
+    qDebug() << "[Network] PASS response:" << passResponse;
+    
+    // Kết nối lại signal
+    connect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+    
+    // 5. Kiểm tra kết quả
+    if (passResponse.startsWith(CODE_LOGIN_SUCCESS)) {
+        qDebug() << "[Network] Login successful!";
+        currentUsername = user;
+        currentPassword = pass;
+        emit loginSuccess();
+    } else if (passResponse.startsWith(CODE_LOGIN_FAIL)) {
+        qDebug() << "[Network] Login failed: Invalid credentials";
+        emit loginFailed("Invalid username or password");
+    } else {
+        qDebug() << "[Network] Unexpected PASS response:" << passResponse;
+        emit loginFailed("Unexpected server response: " + passResponse);
+    }
 }
 
 void NetworkManager::requestFileList() {
@@ -353,25 +414,75 @@ void NetworkManager::logout() {
     emit logoutSuccess();
 }
 
+// ========================================
+// THAY THẾ HÀM onReadyRead() TRONG network_manager.cpp
+// ========================================
+
 void NetworkManager::onReadyRead() {
-    while(socket->canReadLine()) {
-        QByteArray data = socket->readLine();
-        QString response = QString::fromUtf8(data).trimmed();
+    // Đọc TẤT CẢ data available cùng lúc
+    QByteArray allData = socket->readAll();
+    QString fullResponse = QString::fromUtf8(allData).trimmed();
+    
+    if (fullResponse.isEmpty()) return;
+    
+    qDebug() << "========== NETWORK DEBUG ==========";
+    qDebug() << "[Network] Raw bytes:" << allData.size();
+    qDebug() << "[Network] Full response:\n" << fullResponse;
+    qDebug() << "===================================";
+    
+    // Split thành các dòng
+    QStringList lines = fullResponse.split('\n', Qt::SkipEmptyParts);
+    qDebug() << "[Network] Total lines:" << lines.size();
+    
+    // Phân loại responses
+    QStringList fileListLines;
+    bool hasLoginSuccess = false;
+    bool hasLoginFailed = false;
+    
+    for (const QString &line : lines) {
+        QString trimmed = line.trimmed();
         
-        if (response.isEmpty()) continue;
-
-        qDebug() << "[Network] Recv:" << response;
-
-        if (response.startsWith(CODE_LOGIN_SUCCESS)) {
-            emit loginSuccess();
+        qDebug() << "[Network] Processing line:" << trimmed;
+        
+        // Check login responses
+        if (trimmed.startsWith(CODE_LOGIN_SUCCESS)) {
+            hasLoginSuccess = true;
+            qDebug() << "[Network] Login SUCCESS detected";
         } 
-        else if (response.startsWith(CODE_LOGIN_FAIL)) {
-            emit loginFailed("Invalid Username or Password");
+        else if (trimmed.startsWith(CODE_LOGIN_FAIL)) {
+            hasLoginFailed = true;
+            qDebug() << "[Network] Login FAILED detected";
         }
-        else if (response.contains("|")) { 
-            // Giả định: danh sách file có chứa ký tự phân cách |
-            emit fileListReceived(response);
+        // Check for empty list response
+        else if (trimmed.startsWith("210")) {
+            qDebug() << "[Network] Empty list detected";
+            emit fileListReceived(""); // Empty list
+            return;
         }
+        // Detect file list lines (contains |)
+        else if (trimmed.contains('|')) {
+            qDebug() << "[Network] File list line detected:" << trimmed;
+            fileListLines.append(trimmed);
+        }
+    }
+    
+    // Emit login results
+    if (hasLoginSuccess) {
+        emit loginSuccess();
+    }
+    if (hasLoginFailed) {
+        emit loginFailed("Invalid Username or Password");
+    }
+    
+    // Emit file list nếu có
+    if (!fileListLines.isEmpty()) {
+        QString fileListData = fileListLines.join("\n");
+        qDebug() << "========== FILE LIST DATA ==========";
+        qDebug() << "[Network] Emitting" << fileListLines.size() << "files";
+        qDebug() << "[Network] File list data:\n" << fileListData;
+        qDebug() << "====================================";
+        
+        emit fileListReceived(fileListData);
     }
 }
 void NetworkManager::getFolderStructure(long long folder_id) {
@@ -728,4 +839,54 @@ void NetworkManager::cancelFolderShare(const QString &session_id) {
     currentFolderShare = FolderShareSessionInfo();
     
     qDebug() << "[Network] Cancelled folder share:" << session_id;
+}
+
+void NetworkManager::createFolder(const QString &folderName, long long parent_id) {
+    if (socket->state() != QAbstractSocket::ConnectedState) {
+        emit folderCreated(false, "Not connected to server!", -1);
+        return;
+    }
+    
+    qDebug() << "[Network] Creating folder:" << folderName << "in parent:" << parent_id;
+    
+    disconnect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+    
+    // Send command: MKDIR <folder_name> <parent_id>
+    QString cmd = QString("%1 %2 %3\n")
+                    .arg(CMD_CREATE_FOLDER)
+                    .arg(folderName)
+                    .arg(parent_id);
+    
+    socket->write(cmd.toUtf8());
+    socket->flush();
+    
+    // Wait for response
+    if (!socket->waitForReadyRead(5000)) {
+        connect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+        emit folderCreated(false, "Timeout waiting for server response", -1);
+        return;
+    }
+    
+    QString response = QString::fromUtf8(socket->readAll()).trimmed();
+    connect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+    
+    qDebug() << "[Network] Create folder response:" << response;
+    
+    // Parse response: "200 Folder created successfully (ID: 123)"
+    if (response.startsWith(CODE_OK)) {
+        // Extract folder_id from response
+        long long folder_id = -1;
+        QRegularExpression regex("ID: (\\d+)");
+        QRegularExpressionMatch match = regex.match(response);
+        if (match.hasMatch()) {
+            folder_id = match.captured(1).toLongLong();
+        }
+        
+        emit folderCreated(true, folderName, folder_id);
+        
+        // Refresh file list after 200ms
+        QTimer::singleShot(200, this, &NetworkManager::requestFileList);
+    } else {
+        emit folderCreated(false, response, -1);
+    }
 }

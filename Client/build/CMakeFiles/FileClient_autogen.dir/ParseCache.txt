@@ -293,6 +293,7 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonArray
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QObject
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QString
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qalgorithms.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qanystringview.h
@@ -689,6 +690,7 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonArray
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QObject
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QString
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qalgorithms.h
@@ -1152,6 +1154,7 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonArray
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QObject
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QString
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/qalgorithms.h

@@ -24,6 +24,7 @@ private slots:
 
     // Dashboard page
     void onRefreshClicked();
+    void onCreateFolderClicked();      // NEW
     void onUploadClicked();
     void onDownloadClicked();
     void onShareClicked();
@@ -31,7 +32,7 @@ private slots:
     void onLogoutClicked();
     void onTabChanged(int index);
     
-    // NEW: Folder share
+    // Folder share
     void onShareFolderClicked();
     void showContextMenu(const QPoint &pos);
 
@@ -41,6 +42,7 @@ private slots:
     void handleDownloadComplete(QString filename);
     void handleShareResult(bool success, QString msg);
     void handleDeleteResult(bool success, QString msg);
+    void handleFolderCreated(bool success, QString message, long long folder_id);  // NEW
     void handleLogout();
 
 private:

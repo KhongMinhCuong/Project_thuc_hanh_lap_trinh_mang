@@ -406,11 +406,26 @@ void WorkerThread::handleClientMessage(int fd) {
         
         response = "200 Share cancelled\n";
     }
+    else if (command == "MKDIR" || command == "CREATE_FOLDER") {
+        std::stringstream ss_mkdir(arg);
+        std::string folder_name;
+        long long parent_id = 1;
+        
+        ss_mkdir >> folder_name;
+        
+        if (ss_mkdir >> parent_id) {
+        }
+        
+        std::cout << "[Worker] CREATE_FOLDER: name=" << folder_name 
+                << ", parent_id=" << parent_id << std::endl;
+        
+        std::lock_guard<std::mutex> lock(mtx);
+        response = CmdHandler::handleCreateFolder(sessions[fd], folder_name, parent_id);
+    }
     else {
         response = "500 Unknown command\n";
     }
 
-    // Gửi phản hồi
     if (!response.empty()) {
         send(fd, response.c_str(), response.length(), 0);
     }

@@ -4,9 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "server.h" // Chứa struct ClientSession
-
-// ===== EXISTING HANDLERS - GIỮ NGUYÊN =====
+#include "server.h"
 
 // Xử lý xác thực (Login, Register)
 class AuthHandler {
@@ -24,8 +22,11 @@ public:
     static std::string handleSearch(const ClientSession& session, const std::string& keyword);
     static std::string handleShare(const ClientSession& session, const std::string& filename, const std::string& targetUser);
     static std::string handleDelete(const ClientSession& session, const std::string& filename);
+
+    static std::string handleCreateFolder(const ClientSession& session, 
+                                         const std::string& folderName,
+                                         long long parent_id);
     
-    // ===== NEW: FOLDER SHARE COMMANDS =====
     static std::string handleShareFolder(const ClientSession& session, long long folder_id, const std::string& targetUser);
     static std::string handleGetFolderStructure(const ClientSession& session, long long folder_id);
 };
@@ -36,8 +37,6 @@ public:
     static std::string handleQuotaCheck(const ClientSession& session, long filesize);
     static bool checkDownloadPermission(const ClientSession& session, const std::string& filename);
 };
-
-// ===== NEW: FOLDER SHARE HANDLER =====
 
 struct FileTransferInfo {
     long long old_file_id;
@@ -58,41 +57,33 @@ struct FolderShareSession {
     std::map<long long, long long> old_to_new_id_map;
     int total_files;
     int completed_files;
-    std::string status; // "pending", "uploading", "completed", "failed"
+    std::string status;
 };
 
 class FolderShareHandler {
 public:
-    // Singleton
     static FolderShareHandler& getInstance() {
         static FolderShareHandler instance;
         return instance;
     }
     
-    // Khởi tạo folder share và trả về session_id
     std::string initiateFolderShare(const std::string& owner_username, 
                                     long long folder_id, 
                                     const std::string& recipient_username);
     
-    // Lấy session info
     FolderShareSession* getSession(const std::string& session_id);
     
-    // Nhận file từ client
     bool receiveFile(const std::string& session_id, 
                     long long old_file_id,
                     const char* file_data,
                     size_t file_size);
     
-    // Kiểm tra hoàn thành
     bool isComplete(const std::string& session_id);
     
-    // Finalize share (tạo permissions)
     bool finalize(const std::string& session_id);
     
-    // Cleanup session
     void cleanup(const std::string& session_id);
     
-    // Get progress
     std::string getProgress(const std::string& session_id);
 
 private:
@@ -110,4 +101,4 @@ private:
     std::string generateSessionId();
 };
 
-#endif // REQUEST_HANDLER_H
+#endif

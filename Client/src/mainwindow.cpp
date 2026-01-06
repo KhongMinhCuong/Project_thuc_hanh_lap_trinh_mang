@@ -28,6 +28,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connect(netManager, &NetworkManager::shareResult, this, &MainWindow::handleShareResult);
     connect(netManager, &NetworkManager::deleteResult, this, &MainWindow::handleDeleteResult);
     connect(netManager, &NetworkManager::logoutSuccess, this, &MainWindow::handleLogout);
+    
+    // NEW: Folder creation signal
+    connect(netManager, &NetworkManager::folderCreated, this, &MainWindow::handleFolderCreated);
 }
 
 MainWindow::~MainWindow() {}
@@ -82,6 +85,7 @@ QWidget* MainWindow::createDashboardPage() {
     // Buttons row
     QHBoxLayout *btnLayout = new QHBoxLayout;
     QPushButton *btnRefresh = new QPushButton("Refresh");
+    QPushButton *btnCreateFolder = new QPushButton("Create Folder");
     QPushButton *btnUpload = new QPushButton("Upload File");
     QPushButton *btnDownload = new QPushButton("Download Selected");
     QPushButton *btnShare = new QPushButton("Share File");
@@ -89,6 +93,7 @@ QWidget* MainWindow::createDashboardPage() {
     QPushButton *btnShareFolder = new QPushButton("Share Folder");
     
     btnLayout->addWidget(btnRefresh);
+    btnLayout->addWidget(btnCreateFolder);
     btnLayout->addWidget(btnUpload);
     btnLayout->addWidget(btnDownload);
     btnLayout->addWidget(btnShare);
@@ -126,6 +131,7 @@ QWidget* MainWindow::createDashboardPage() {
     l->addWidget(tabWidget);
 
     connect(btnRefresh, &QPushButton::clicked, this, &MainWindow::onRefreshClicked);
+    connect(btnCreateFolder, &QPushButton::clicked, this, &MainWindow::onCreateFolderClicked);
     connect(btnUpload, &QPushButton::clicked, this, &MainWindow::onUploadClicked);
     connect(btnDownload, &QPushButton::clicked, this, &MainWindow::onDownloadClicked);
     connect(btnShare, &QPushButton::clicked, this, &MainWindow::onShareClicked);
@@ -158,33 +164,76 @@ void MainWindow::onRefreshClicked() {
 }
 
 void MainWindow::onTabChanged(int index) {
+    qDebug() << "[MainWindow] Tab changed to:" << index;
+    
     if (index == 0) {
-        // Tab "My Files" - request LIST
+        qDebug() << "[MainWindow] Requesting My Files list";
         netManager->requestFileList();
     } else if (index == 1) {
-        // Tab "Shared with Me" - request LISTSHARED
+        qDebug() << "[MainWindow] Requesting Shared Files list";
         netManager->requestSharedFileList();
     }
 }
 
 void MainWindow::handleFileList(QString data) {
-    // Xác định table nào cần update dựa vào tab hiện tại
+    // Debug: In ra data nhận được
+    qDebug() << "[MainWindow] handleFileList called";
+    qDebug() << "[MainWindow] Raw data length:" << data.length();
+    qDebug() << "[MainWindow] Raw data:" << data;
+    
+    // Xác định table nào cần update
     QTableWidget* targetTable = (tabWidget->currentIndex() == 0) ? fileTable : sharedFileTable;
     
-    targetTable->setRowCount(0); // Xóa cũ
-    // Giả sử server gửi: "file1.txt|1024|admin\nfile2.jpg|2048|user"
-    QStringList rows = data.split('\n', Qt::SkipEmptyParts);
+    // Xóa dữ liệu cũ
+    targetTable->setRowCount(0);
     
-    for(const QString &line : rows) {
+    // Check empty
+    if (data.isEmpty()) {
+        qDebug() << "[MainWindow] Empty file list received";
+        return;
+    }
+    
+    // Split thành các dòng
+    QStringList rows = data.split('\n', Qt::SkipEmptyParts);
+    qDebug() << "[MainWindow] Number of rows after split:" << rows.size();
+    
+    // Parse từng dòng
+    int successCount = 0;
+    for (int i = 0; i < rows.size(); i++) {
+        const QString &line = rows[i].trimmed();
+        
+        qDebug() << "[MainWindow] Processing row" << i << ":" << line;
+        
+        // Skip empty lines
+        if (line.isEmpty()) {
+            qDebug() << "[MainWindow] Skipping empty line";
+            continue;
+        }
+        
+        // Split by |
         QStringList cols = line.split('|');
-        if(cols.size() >= 3) {
+        qDebug() << "[MainWindow] Columns found:" << cols.size();
+        
+        if (cols.size() >= 3) {
             int row = targetTable->rowCount();
             targetTable->insertRow(row);
-            targetTable->setItem(row, 0, new QTableWidgetItem(cols[0]));
-            targetTable->setItem(row, 1, new QTableWidgetItem(cols[1]));
-            targetTable->setItem(row, 2, new QTableWidgetItem(cols[2]));
+            
+            // Set items
+            targetTable->setItem(row, 0, new QTableWidgetItem(cols[0].trimmed())); // Filename
+            targetTable->setItem(row, 1, new QTableWidgetItem(cols[1].trimmed())); // Size
+            targetTable->setItem(row, 2, new QTableWidgetItem(cols[2].trimmed())); // Owner
+            
+            successCount++;
+            qDebug() << "[MainWindow] Added row" << row << ":" 
+                     << cols[0] << "|" << cols[1] << "|" << cols[2];
+        } else {
+            qDebug() << "[MainWindow] WARNING: Row has insufficient columns:" << line;
+            qDebug() << "[MainWindow] Columns:" << cols;
         }
     }
+    
+    qDebug() << "[MainWindow] Successfully added" << successCount << "files to table";
+    qDebug() << "[MainWindow] Final table row count:" << targetTable->rowCount();
 }
 
 void MainWindow::onUploadClicked() {
@@ -219,7 +268,6 @@ void MainWindow::onDownloadClicked() {
 
 void MainWindow::handleUploadProgress(QString msg) {
     QMessageBox::information(this, "Upload", msg);
-    // Không cần gọi refresh ở đây nữa vì NetworkManager đã tự refresh
 }
 
 void MainWindow::handleDownloadComplete(QString filename) {
@@ -319,6 +367,68 @@ void MainWindow::handleLogout() {
     QMessageBox::information(this, "Logout", "You have been logged out successfully.");
 }
 
+// ===== CREATE FOLDER IMPLEMENTATION =====
+
+void MainWindow::onCreateFolderClicked() {
+    // Chỉ tạo folder trong "My Files" tab
+    if (tabWidget->currentIndex() != 0) {
+        QMessageBox::warning(this, "Create Folder", 
+            "You can only create folders in 'My Files' tab!");
+        return;
+    }
+    
+    // Input dialog để nhập tên folder
+    bool ok;
+    QString folderName = QInputDialog::getText(this, "Create Folder",
+                                               "Enter folder name:",
+                                               QLineEdit::Normal,
+                                               "New Folder", &ok);
+    
+    if (!ok || folderName.isEmpty()) {
+        return;
+    }
+    
+    // Validate folder name
+    if (folderName.contains('/') || folderName.contains('\\') || 
+        folderName.contains('\0')) {
+        QMessageBox::warning(this, "Create Folder", 
+            "Folder name cannot contain /, \\, or null characters!");
+        return;
+    }
+    
+    // Trim whitespace
+    folderName = folderName.trimmed();
+    
+    if (folderName.isEmpty()) {
+        QMessageBox::warning(this, "Create Folder", "Folder name cannot be empty!");
+        return;
+    }
+    
+    // TODO: Nếu có chọn parent folder từ UI, lấy parent_id
+    // Hiện tại default = 1 (root)
+    long long parent_id = 1;
+    
+    // Create folder
+    qDebug() << "[MainWindow] Creating folder:" << folderName << "in parent:" << parent_id;
+    netManager->createFolder(folderName, parent_id);
+}
+
+void MainWindow::handleFolderCreated(bool success, QString message, long long folder_id) {
+    qDebug() << "[MainWindow] Folder created:" << success << message << folder_id;
+    
+    if (success) {
+        QMessageBox::information(this, "Create Folder", 
+            QString("Folder created successfully!\n\nFolder: %1\nID: %2")
+            .arg(message)
+            .arg(folder_id));
+        
+        // File list sẽ tự động refresh từ NetworkManager::createFolder()
+    } else {
+        QMessageBox::warning(this, "Create Folder", 
+            "Failed to create folder:\n" + message);
+    }
+}
+
 // ===== FOLDER SHARE IMPLEMENTATION =====
 
 void MainWindow::onShareFolderClicked() {
@@ -337,7 +447,7 @@ void MainWindow::onShareFolderClicked() {
     // Step 1: Nhập folder ID
     QString folderIdStr = QInputDialog::getText(this, "Share Folder",
                                                 "Enter Folder ID:",
-                                                QLineEdit::Normal, "123", &ok);
+                                                QLineEdit::Normal, "", &ok);
     if (!ok || folderIdStr.isEmpty()) {
         return;
     }
@@ -351,7 +461,7 @@ void MainWindow::onShareFolderClicked() {
     // Step 2: Nhập folder name
     QString folderName = QInputDialog::getText(this, "Share Folder",
                                                "Enter Folder Name:",
-                                               QLineEdit::Normal, "MyFolder", &ok);
+                                               QLineEdit::Normal, "", &ok);
     if (!ok || folderName.isEmpty()) {
         return;
     }
@@ -360,7 +470,7 @@ void MainWindow::onShareFolderClicked() {
     QString targetUser = QInputDialog::getText(this, "Share Folder",
                                               QString("Share folder '%1' to username:")
                                               .arg(folderName),
-                                              QLineEdit::Normal, "guest", &ok);
+                                              QLineEdit::Normal, "", &ok);
     if (!ok || targetUser.isEmpty()) {
         return;
     }
@@ -403,24 +513,31 @@ void MainWindow::onShareFolderClicked() {
 
 void MainWindow::showContextMenu(const QPoint &pos) {
     int row = fileTable->rowAt(pos.y());
-    if (row < 0) return;
     
     QMenu menu(this);
     
-    // NOTE: Trong production, bạn cần thêm logic để detect folder vs file
-    // Giả sử bạn thêm data vào QTableWidgetItem để track is_folder
+    // Always show "Create Folder" option
+    QAction *createFolderAction = menu.addAction("Create Folder Here");
+    connect(createFolderAction, &QAction::triggered, this, &MainWindow::onCreateFolderClicked);
     
-    // For now, show both options
-    QAction *shareFileAction = menu.addAction("Share File");
-    QAction *shareFolderAction = menu.addAction("Share Folder");
     menu.addSeparator();
-    QAction *downloadAction = menu.addAction("Download");
-    QAction *deleteAction = menu.addAction("Delete");
     
-    connect(shareFileAction, &QAction::triggered, this, &MainWindow::onShareClicked);
-    connect(shareFolderAction, &QAction::triggered, this, &MainWindow::onShareFolderClicked);
-    connect(downloadAction, &QAction::triggered, this, &MainWindow::onDownloadClicked);
-    connect(deleteAction, &QAction::triggered, this, &MainWindow::onDeleteClicked);
+    // If a row is selected, show file/folder specific actions
+    if (row >= 0) {
+        // NOTE: Trong production, bạn cần detect xem là folder hay file
+        // Giả sử thêm data vào QTableWidgetItem
+        
+        QAction *shareFileAction = menu.addAction("Share File");
+        QAction *shareFolderAction = menu.addAction("Share Folder");
+        menu.addSeparator();
+        QAction *downloadAction = menu.addAction("Download");
+        QAction *deleteAction = menu.addAction("Delete");
+        
+        connect(shareFileAction, &QAction::triggered, this, &MainWindow::onShareClicked);
+        connect(shareFolderAction, &QAction::triggered, this, &MainWindow::onShareFolderClicked);
+        connect(downloadAction, &QAction::triggered, this, &MainWindow::onDownloadClicked);
+        connect(deleteAction, &QAction::triggered, this, &MainWindow::onDeleteClicked);
+    }
     
     menu.exec(fileTable->mapToGlobal(pos));
 }

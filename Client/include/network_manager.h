@@ -6,6 +6,7 @@
 #include <QString>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QRegularExpression>
 
 // Protocol Commands
 #define CMD_USER "USER"
@@ -17,8 +18,9 @@
 #define CMD_DOWNLOAD "RETR"
 #define CMD_SHARE "SHARE"
 #define CMD_DELETE "DELETE"
+#define CMD_CREATE_FOLDER "MKDIR"  // NEW
 
-// ===== NEW: FOLDER SHARE COMMANDS =====
+// Folder share commands
 #define CMD_GET_FOLDER_STRUCTURE "GET_FOLDER_STRUCTURE"
 #define CMD_SHARE_FOLDER "SHARE_FOLDER"
 #define CMD_UPLOAD_FOLDER_FILE "UPLOAD_FOLDER_FILE"
@@ -33,7 +35,7 @@
 #define CODE_DATA_OPEN "150"
 #define CODE_TRANSFER_COMPLETE "226"
 
-// ===== NEW: FOLDER SHARE STRUCTURES =====
+// Folder share structures
 struct FileNodeInfo {
     long long file_id;
     QString name;
@@ -57,7 +59,7 @@ class NetworkManager : public QObject {
 public:
     explicit NetworkManager(QObject *parent = nullptr);
     
-    // ===== EXISTING FUNCTIONS - GIỮ NGUYÊN =====
+    // Existing functions
     void connectToServer(const QString &host, quint16 port);
     void login(const QString &user, const QString &pass);
     void requestFileList();
@@ -68,25 +70,18 @@ public:
     void deleteFile(const QString &filename);
     void logout();
 
-    // ===== NEW: FOLDER SHARE FUNCTIONS =====
-    
-    // Lấy cấu trúc folder từ server
+    // NEW: Create folder
+    void createFolder(const QString &folderName, long long parent_id = 1);
+
+    // Folder share functions
     void getFolderStructure(long long folder_id);
-    
-    // Khởi tạo folder share
     void shareFolderRequest(long long folder_id, const QString &targetUser);
-    
-    // Upload từng file trong folder
     void uploadFolderFile(const QString &session_id, const FileNodeInfo &fileInfo, const QString &localBasePath);
-    
-    // Check progress
     void checkShareProgress(const QString &session_id);
-    
-    // Cancel share
     void cancelFolderShare(const QString &session_id);
 
 signals:
-    // ===== EXISTING SIGNALS - GIỮ NGUYÊN =====
+    // Existing signals
     void connectionStatus(bool success, QString msg);
     void loginSuccess();
     void loginFailed(QString msg);
@@ -98,7 +93,10 @@ signals:
     void logoutSuccess();
     void transferProgress(qint64 current, qint64 total);
 
-    // ===== NEW: FOLDER SHARE SIGNALS =====
+    // NEW: Folder creation
+    void folderCreated(bool success, QString message, long long folder_id);
+
+    // Folder share signals
     void folderStructureReceived(long long folder_id, QList<FileNodeInfo> structure);
     void folderShareInitiated(const QString &session_id, int total_files, const QList<FileNodeInfo> &files);
     void folderFileUploaded(int completed, int total);
@@ -116,7 +114,7 @@ private:
     QString currentUsername;
     QString currentPassword;
     
-    // ===== NEW: FOLDER SHARE STATE =====
+    // Folder share state
     FolderShareSessionInfo currentFolderShare;
     bool isFolderShareActive = false;
 };

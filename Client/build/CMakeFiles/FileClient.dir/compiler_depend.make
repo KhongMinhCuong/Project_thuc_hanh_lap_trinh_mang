@@ -299,6 +299,7 @@ FileClient_autogen/timestamp: /mnt/c/Users/Admin/Documents/THLTM/Project_thuc_ha
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonArray \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qalgorithms.h \
@@ -844,6 +845,8 @@ FileClient_autogen/timestamp: /mnt/c/Users/Admin/Documents/THLTM/Project_thuc_ha
 /usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsTargets.cmake:
 
 /usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsDependencies.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsConfigVersionImpl.cmake:
 
 /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
 
@@ -1625,6 +1628,8 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/lib/x86_64-linux-gnu/cmake/Qt6/3rdparty/kwin/FindXKB.cmake:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression:
+
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QString:
@@ -1904,8 +1909,6 @@ CMakeFiles/3.28.3/CMakeSystem.cmake:
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qgridlayout.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayoutitem.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsConfigVersionImpl.cmake:
 
 /usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
 
