@@ -32,7 +32,7 @@ struct ServerConfig {
     static constexpr int DB_PORT = 3306;
     
     // ============ STORAGE CONFIG ============
-    static constexpr const char* STORAGE_PATH = "/mnt/c/Users/Admin/Documents/THLTM/Project_thuc_hanh_lap_trinh_mang/Server/storage/";
+    static constexpr const char* STORAGE_PATH = "/mnt/c/Users/Admin/Documents/LTM/Server/storage/";
     static constexpr long DEFAULT_USER_QUOTA = 1073741824;  // 1GB in bytes
     
     // ============ BUFFER CONFIG ============

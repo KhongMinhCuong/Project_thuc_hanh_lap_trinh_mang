@@ -18,12 +18,19 @@
 #define CMD_DOWNLOAD "RETR"
 #define CMD_SHARE "SHARE"
 #define CMD_DELETE "DELETE"
+#define CMD_RENAME "RENAME"
 
 #define CMD_GET_FOLDER_STRUCTURE "GET_FOLDER_STRUCTURE"
 #define CMD_SHARE_FOLDER "SHARE_FOLDER"
-#define CMD_UPLOAD_FOLDER_FILE "UPLOAD_FOLDER_FILE"
+#define CMD_UPLOAD_FILE "UPLOAD_FILE"
+#define CMD_DOWNLOAD_FOLDER "DOWNLOAD_FOLDER"
 #define CMD_CHECK_SHARE_PROGRESS "CHECK_SHARE_PROGRESS"
 #define CMD_CANCEL_FOLDER_SHARE "CANCEL_FOLDER_SHARE"
+#define CMD_CREATE_FOLDER "CREATE_FOLDER"
+
+#define TYPE_FILE 1
+#define TYPE_DIR  2
+#define TYPE_END  3
 
 #define CODE_OK "200"
 #define CODE_FAIL "500"
@@ -62,9 +69,12 @@ public:
     void requestFileList(long long parent_id = 0);
     void requestSharedFileList(long long parent_id = -1); // -1 = root, >= 0 = specific folder
     void uploadFile(const QString &filePath, long long parent_id = 0);
+    void uploadFolder(const QString &folderPath, long long parent_id = 0);
     void downloadFile(const QString &filename, const QString &savePath);
+    void downloadFolder(const QString &foldername, const QString &savePath);
     void shareFile(const QString &filename, const QString &targetUser);
     void deleteFile(const QString &filename);
+    void renameItem(const QString &fileId, const QString &newName, const QString &itemType);
     void logout();
 
     void getFolderStructure(long long folder_id);
@@ -86,6 +96,7 @@ signals:
     void downloadComplete(QString filename);
     void shareResult(bool success, QString msg);
     void deleteResult(bool success, QString msg);
+    void renameResult(bool success, QString msg);
     void logoutSuccess();
     void transferProgress(qint64 current, qint64 total);
 
@@ -95,11 +106,16 @@ signals:
     void folderShareCompleted(const QString &session_id);
     void folderShareFailed(const QString &error);
     void folderShareProgress(int percentage, const QString &status);
+    void folderUploadStarted(const QString &folderName, int totalFiles);
+    void folderUploadProgress(int currentFile, int totalFiles, const QString &currentFileName);
+    void folderUploadCompleted(const QString &folderName);
 
 private slots:
     void onReadyRead();
 
 private:
+    bool ensureConnected();
+    
     QTcpSocket *socket;
     QString currentHost;
     quint16 currentPort;

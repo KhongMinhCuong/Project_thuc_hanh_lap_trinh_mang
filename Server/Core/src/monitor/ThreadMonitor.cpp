@@ -47,15 +47,25 @@ void ThreadMonitor::reportDedicatedThreadEnd() {
 
 void ThreadMonitor::reportConnectionCount(std::thread::id workerId, int count) {
     std::lock_guard<std::mutex> lock(poolMutex);
+    
+    // Only log if connection count changed
+    bool changed = false;
+    if (workerConnections.find(workerId) == workerConnections.end() || workerConnections[workerId] != count) {
+        changed = true;
+    }
+    
     workerConnections[workerId] = count;
     
     int total = 0;
-    std::cout << "[Monitor] Connection report - Worker " << workerId << ": " << count << " connections" << std::endl;
     for (const auto& pair : workerConnections) {
-        std::cout << "  Worker " << pair.first << " has " << pair.second << " connections" << std::endl;
         total += pair.second;
     }
-    std::cout << "[Monitor] Total connections: " << total << std::endl;
+    
+    // Only print when connection count actually changes
+    if (changed) {
+        std::cout << "[Monitor] Connection change - Worker " << workerId << ": " << count << " connections (Total: " << total << ")" << std::endl;
+    }
+    
     stats.totalConnections.store(total);
 }
 
@@ -89,7 +99,7 @@ void ThreadMonitor::monitorLoop() {
     using namespace std::chrono;
     
     auto lastPrintTime = steady_clock::now();
-    const int PRINT_INTERVAL_SECONDS = 30;
+    const int PRINT_INTERVAL_SECONDS = 300; // Print stats every 5 minutes instead of 30 seconds
     
     while (running.load()) {
         std::this_thread::sleep_for(seconds(5));

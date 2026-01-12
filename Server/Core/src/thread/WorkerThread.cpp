@@ -4,6 +4,7 @@
 #include "../../../../Common/Protocol.h"
 #include <sys/epoll.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <cstring>
 #include <iostream>
@@ -212,6 +213,18 @@ void WorkerThread::handleClientMessage(int fd) {
         std::lock_guard<std::mutex> lock(mtx);
         response = CmdHandler::handleDelete(sessions[fd], arg);
     }
+    else if (command == CMD_RENAME) {
+        std::stringstream ss(arg);
+        long long fileId;
+        std::string newName;
+        ss >> fileId >> newName;
+        
+        std::cout << "[RENAME] Received: file_id=" << fileId << ", new_name='" << newName 
+                  << "', username=" << sessions[fd].username << std::endl;
+        
+        std::lock_guard<std::mutex> lock(mtx);
+        response = CmdHandler::handleRename(sessions[fd], fileId, newName);
+    }
     
     else if (command == CMD_UPLOAD_CHECK) {
         std::stringstream ss_quota(arg);
@@ -231,13 +244,18 @@ void WorkerThread::handleClientMessage(int fd) {
         long long parent_id = 0;
         std::stringstream ss_up(arg);
         ss_up >> fname >> fsize >> parent_id;
+        
+        std::cout << "[Worker::CMD_UPLOAD] File: " << fname << ", Size: " << fsize << ", Parent ID: " << parent_id << std::endl;
 
         if (fsize <= 0) {
+            std::cout << "[Worker::CMD_UPLOAD] Invalid file size" << std::endl;
             response = std::string(CODE_FAIL) + " Invalid file size\n";
         } else if (!ThreadMonitor::getInstance().canCreateDedicatedThread()) {
+            std::cout << "[Worker::CMD_UPLOAD] System overloaded" << std::endl;
             response = "503 System overloaded\n";
         } else {
             std::string username = sessions[fd].username;
+            std::cout << "[Worker::CMD_UPLOAD] Starting dedicated thread for upload" << std::endl;
             removeClient(fd, false);
             
             std::thread t([fd, fname, fsize, username, parent_id, this]() {
@@ -253,6 +271,8 @@ void WorkerThread::handleClientMessage(int fd) {
     }
     else if (command == CMD_DOWNLOAD) {
         std::string fname = arg;
+        std::cout << "[Worker::CMD_DOWNLOAD] File: " << fname << ", User: " << sessions[fd].username << std::endl;
+        
         bool hasPerm = false;
         {
              std::lock_guard<std::mutex> lock(mtx);
@@ -260,11 +280,14 @@ void WorkerThread::handleClientMessage(int fd) {
         }
 
         if (!hasPerm) {
+            std::cout << "[Worker::CMD_DOWNLOAD] Permission denied" << std::endl;
             response = std::string(CODE_FAIL) + " Permission denied\n";
         } else if (!ThreadMonitor::getInstance().canCreateDedicatedThread()) {
+            std::cout << "[Worker::CMD_DOWNLOAD] System overloaded" << std::endl;
             response = "503 System overloaded\n";
         } else {
             std::string username = sessions[fd].username;
+            std::cout << "[Worker::CMD_DOWNLOAD] Starting dedicated thread for download" << std::endl;
             removeClient(fd, false);
 
             std::thread t([fd, fname, username, this]() {
@@ -276,12 +299,58 @@ void WorkerThread::handleClientMessage(int fd) {
             return;
         }
     }
+    else if (command == "DOWNLOAD_FOLDER") {
+        std::string folder_name = arg;
+        std::string username = sessions[fd].username;
+        
+        std::cout << "[Worker] DOWNLOAD_FOLDER request: '" << folder_name << "' by user: " << username << std::endl;
+        
+        // Check if folder exists in storage
+        std::string folderPath = std::string(ServerConfig::STORAGE_PATH) + folder_name;
+        std::cout << "[Worker] Checking folder path: " << folderPath << std::endl;
+        
+        struct stat st;
+        int stat_result = stat(folderPath.c_str(), &st);
+        
+        if (stat_result != 0) {
+            std::cout << "[Worker] stat() failed with error: " << strerror(errno) << std::endl;
+            response = std::string(CODE_FAIL) + " Folder not found\n";
+        } else if (!S_ISDIR(st.st_mode)) {
+            std::cout << "[Worker] Path exists but is not a directory" << std::endl;
+            response = std::string(CODE_FAIL) + " Folder not found\n";
+        } else {
+            std::cout << "[Worker] Folder exists, checking permissions..." << std::endl;
+            // Check if user owns the folder or has permission
+            bool hasPerm = true;
+            try {
+                hasPerm = FileIOHandler::checkDownloadPermission(sessions[fd], folder_name);
+            } catch (...) {
+                // If permission check fails, allow if folder exists in user's storage
+                hasPerm = true;
+            }
+            
+            if (!hasPerm) {
+                std::cout << "[Worker] Permission denied" << std::endl;
+                response = std::string(CODE_FAIL) + " Permission denied\n";
+            } else {
+                std::cout << "[Worker] Permission OK, sending folder..." << std::endl;
+                // Send ready response
+                response = std::string(CODE_DATA_OPEN) + " Ready to send folder\n";
+                send(fd, response.c_str(), response.length(), 0);
+                
+                // Handle folder download
+                DedicatedThread dt;
+                dt.handleFolderDownload(fd, folder_name, username);
+                return;
+            }
+        }
+    }
     else if (command == "GET_FOLDER_STRUCTURE") {
         long long folder_id = 0;
         std::stringstream ss_folder(arg);
         ss_folder >> folder_id;
         
-        std::cout << "[Worker] GET_FOLDER_STRUCTURE: folder_id=" << folder_id << std::endl;
+        std::cout << "[Worker::CMD_GET_FOLDER_STRUCTURE] Folder ID: " << folder_id << ", User: " << sessions[fd].username << std::endl;
         
         std::lock_guard<std::mutex> lock(mtx);
         response = CmdHandler::handleGetFolderStructure(sessions[fd], folder_id);
@@ -293,6 +362,8 @@ void WorkerThread::handleClientMessage(int fd) {
         std::stringstream ss_share_folder(arg);
         ss_share_folder >> folder_id >> target_user;
         
+        std::cout << "[Worker::CMD_SHARE_FOLDER] Folder ID: " << folder_id << ", Target: " << target_user << ", User: " << sessions[fd].username << std::endl;
+        
         std::cout << "[Worker] SHARE_FOLDER: folder_id=" << folder_id 
                   << ", target=" << target_user << std::endl;
         
@@ -300,7 +371,7 @@ void WorkerThread::handleClientMessage(int fd) {
         response = CmdHandler::handleShareFolder(sessions[fd], folder_id, target_user);
     }
     
-    else if (command == "UPLOAD_FOLDER_FILE") {
+    else if (command == "UPLOAD_FILE") {
         std::string session_id;
         long long old_file_id = 0;
         long file_size = 0;
@@ -308,7 +379,7 @@ void WorkerThread::handleClientMessage(int fd) {
         std::stringstream ss_upload_folder(arg);
         ss_upload_folder >> session_id >> old_file_id >> file_size;
         
-        std::cout << "[Worker] UPLOAD_FOLDER_FILE: session=" << session_id 
+        std::cout << "[Worker] UPLOAD_FILE: session=" << session_id 
                   << ", file_id=" << old_file_id 
                   << ", size=" << file_size << std::endl;
         
@@ -361,6 +432,28 @@ void WorkerThread::handleClientMessage(int fd) {
                     std::string progress = FolderShareHandler::getInstance().getProgress(session_id);
                     response = "202 " + progress + "\n";
                 }
+            }
+        }
+    }
+    
+    else if (command == "CREATE_FOLDER") {
+        std::stringstream ss_create(arg);
+        std::string foldername;
+        long long parent_id = 0;
+        ss_create >> foldername >> parent_id;
+        
+        if (!sessions[fd].isAuthenticated) {
+            response = std::string(CODE_FAIL) + " Please login first\n";
+        } else {
+            std::lock_guard<std::mutex> lock(mtx);
+            long long folder_id = DBManager::getInstance().createFolder(foldername, parent_id, sessions[fd].username);
+            
+            if (folder_id != -1) {
+                std::cout << "[Server] Created folder: " << foldername << " (ID: " << folder_id << ")" << std::endl;
+                response = std::string(CODE_OK) + " Folder created|FOLDER_ID:" + std::to_string(folder_id) + "\n";
+            } else {
+                std::cerr << "[Server] Failed to create folder: " << foldername << std::endl;
+                response = std::string(CODE_FAIL) + " Failed to create folder\n";
             }
         }
     }

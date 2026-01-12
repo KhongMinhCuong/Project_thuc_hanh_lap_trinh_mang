@@ -23,6 +23,7 @@ public:
     static std::string handleSearch(const ClientSession& session, const std::string& keyword);
     static std::string handleShare(const ClientSession& session, const std::string& filename, const std::string& targetUser);
     static std::string handleDelete(const ClientSession& session, const std::string& filename);
+    static std::string handleRename(const ClientSession& session, long long fileId, const std::string& newName);
 
     static std::string handleShareFolder(const ClientSession& session, long long folder_id, const std::string& targetUser);
     static std::string handleGetFolderStructure(const ClientSession& session, long long folder_id);

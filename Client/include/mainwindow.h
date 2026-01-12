@@ -30,9 +30,13 @@ private slots:
 
     void onRefreshClicked();
     void onUploadClicked();
+    void onUploadFileClicked();
+    void onUploadFolderClicked();
     void onDownloadClicked();
+    void onDownloadFolderClicked();
     void onShareClicked();
     void onDeleteClicked();
+    void onRenameClicked();
     void onLogoutClicked();
     void onTabChanged(int index);
     
@@ -48,6 +52,7 @@ private slots:
     void handleDownloadComplete(QString filename);
     void handleShareResult(bool success, QString msg);
     void handleDeleteResult(bool success, QString msg);
+    void handleRenameResult(bool success, QString msg);
     void handleLogout();
 
 private:

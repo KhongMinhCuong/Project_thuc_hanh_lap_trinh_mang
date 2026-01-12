@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cuong/DuAnPMCSF/File_Management_App/Client
+CMAKE_SOURCE_DIR = /mnt/c/Users/Admin/Documents/LTM/Client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cuong/DuAnPMCSF/File_Management_App/build_client
+CMAKE_BINARY_DIR = /mnt/c/Users/Admin/Documents/LTM/build_client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles /home/cuong/DuAnPMCSF/File_Management_App/build_client//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles /mnt/c/Users/Admin/Documents/LTM/build_client//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -179,6 +179,30 @@ FileClient_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FileClient.dir/build.make CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.s
 .PHONY : FileClient_autogen/mocs_compilation.cpp.s
 
+src/FolderShareDialog.o: src/FolderShareDialog.cpp.o
+.PHONY : src/FolderShareDialog.o
+
+# target to build an object file
+src/FolderShareDialog.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FileClient.dir/build.make CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o
+.PHONY : src/FolderShareDialog.cpp.o
+
+src/FolderShareDialog.i: src/FolderShareDialog.cpp.i
+.PHONY : src/FolderShareDialog.i
+
+# target to preprocess a source file
+src/FolderShareDialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FileClient.dir/build.make CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.i
+.PHONY : src/FolderShareDialog.cpp.i
+
+src/FolderShareDialog.s: src/FolderShareDialog.cpp.s
+.PHONY : src/FolderShareDialog.s
+
+# target to generate assembly for a file
+src/FolderShareDialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FileClient.dir/build.make CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.s
+.PHONY : src/FolderShareDialog.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -265,6 +289,9 @@ help:
 	@echo "... FileClient_autogen/mocs_compilation.o"
 	@echo "... FileClient_autogen/mocs_compilation.i"
 	@echo "... FileClient_autogen/mocs_compilation.s"
+	@echo "... src/FolderShareDialog.o"
+	@echo "... src/FolderShareDialog.i"
+	@echo "... src/FolderShareDialog.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

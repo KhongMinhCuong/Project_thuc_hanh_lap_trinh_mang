@@ -39,6 +39,11 @@ class DedicatedThread {
 public:
     void handleUpload(int socketFd, std::string filename, long filesize, std::string username, long long parent_id, WorkerThread* workerRef);
     void handleDownload(int socketFd, std::string filename, std::string username, WorkerThread* workerRef);
+    void handleFolderDownload(int socketFd, const std::string& folderName, const std::string& username);
+    
+private:
+    void sendFile(int socketFd, const std::string& fullPath, const std::string& relativePath);
+    void sendDirectory(int socketFd, const std::string& basePath, const std::string& relativePath);
 };
 
 // Class chấp nhận kết nối (Acceptor)

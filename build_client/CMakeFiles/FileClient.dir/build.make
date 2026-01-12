@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cuong/DuAnPMCSF/File_Management_App/Client
+CMAKE_SOURCE_DIR = /mnt/c/Users/Admin/Documents/LTM/Client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cuong/DuAnPMCSF/File_Management_App/build_client
+CMAKE_BINARY_DIR = /mnt/c/Users/Admin/Documents/LTM/build_client
 
 # Include any dependencies generated for this target.
 include CMakeFiles/FileClient.dir/depend.make
@@ -72,69 +72,84 @@ include CMakeFiles/FileClient.dir/flags.make
 FileClient_autogen/timestamp: /usr/lib/qt6/libexec/moc
 FileClient_autogen/timestamp: /usr/lib/qt6/libexec/uic
 FileClient_autogen/timestamp: CMakeFiles/FileClient.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target FileClient"
-	/usr/bin/cmake -E cmake_autogen /home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles/FileClient_autogen.dir/AutogenInfo.json ""
-	/usr/bin/cmake -E touch /home/cuong/DuAnPMCSF/File_Management_App/build_client/FileClient_autogen/timestamp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target FileClient"
+	/usr/bin/cmake -E cmake_autogen /mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles/FileClient_autogen.dir/AutogenInfo.json ""
+	/usr/bin/cmake -E touch /mnt/c/Users/Admin/Documents/LTM/build_client/FileClient_autogen/timestamp
 
 CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o: CMakeFiles/FileClient.dir/flags.make
 CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o: FileClient_autogen/mocs_compilation.cpp
 CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o: CMakeFiles/FileClient.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o -MF CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o -c /home/cuong/DuAnPMCSF/File_Management_App/build_client/FileClient_autogen/mocs_compilation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o -MF CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o -c /mnt/c/Users/Admin/Documents/LTM/build_client/FileClient_autogen/mocs_compilation.cpp
 
 CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cuong/DuAnPMCSF/File_Management_App/build_client/FileClient_autogen/mocs_compilation.cpp > CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Admin/Documents/LTM/build_client/FileClient_autogen/mocs_compilation.cpp > CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.i
 
 CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cuong/DuAnPMCSF/File_Management_App/build_client/FileClient_autogen/mocs_compilation.cpp -o CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Admin/Documents/LTM/build_client/FileClient_autogen/mocs_compilation.cpp -o CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.s
+
+CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o: CMakeFiles/FileClient.dir/flags.make
+CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o: /mnt/c/Users/Admin/Documents/LTM/Client/src/FolderShareDialog.cpp
+CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o: CMakeFiles/FileClient.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o -MF CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o.d -o CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o -c /mnt/c/Users/Admin/Documents/LTM/Client/src/FolderShareDialog.cpp
+
+CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Admin/Documents/LTM/Client/src/FolderShareDialog.cpp > CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.i
+
+CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Admin/Documents/LTM/Client/src/FolderShareDialog.cpp -o CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.s
 
 CMakeFiles/FileClient.dir/src/main.cpp.o: CMakeFiles/FileClient.dir/flags.make
-CMakeFiles/FileClient.dir/src/main.cpp.o: /home/cuong/DuAnPMCSF/File_Management_App/Client/src/main.cpp
+CMakeFiles/FileClient.dir/src/main.cpp.o: /mnt/c/Users/Admin/Documents/LTM/Client/src/main.cpp
 CMakeFiles/FileClient.dir/src/main.cpp.o: CMakeFiles/FileClient.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/FileClient.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileClient.dir/src/main.cpp.o -MF CMakeFiles/FileClient.dir/src/main.cpp.o.d -o CMakeFiles/FileClient.dir/src/main.cpp.o -c /home/cuong/DuAnPMCSF/File_Management_App/Client/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/FileClient.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileClient.dir/src/main.cpp.o -MF CMakeFiles/FileClient.dir/src/main.cpp.o.d -o CMakeFiles/FileClient.dir/src/main.cpp.o -c /mnt/c/Users/Admin/Documents/LTM/Client/src/main.cpp
 
 CMakeFiles/FileClient.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FileClient.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cuong/DuAnPMCSF/File_Management_App/Client/src/main.cpp > CMakeFiles/FileClient.dir/src/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Admin/Documents/LTM/Client/src/main.cpp > CMakeFiles/FileClient.dir/src/main.cpp.i
 
 CMakeFiles/FileClient.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FileClient.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cuong/DuAnPMCSF/File_Management_App/Client/src/main.cpp -o CMakeFiles/FileClient.dir/src/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Admin/Documents/LTM/Client/src/main.cpp -o CMakeFiles/FileClient.dir/src/main.cpp.s
 
 CMakeFiles/FileClient.dir/src/mainwindow.cpp.o: CMakeFiles/FileClient.dir/flags.make
-CMakeFiles/FileClient.dir/src/mainwindow.cpp.o: /home/cuong/DuAnPMCSF/File_Management_App/Client/src/mainwindow.cpp
+CMakeFiles/FileClient.dir/src/mainwindow.cpp.o: /mnt/c/Users/Admin/Documents/LTM/Client/src/mainwindow.cpp
 CMakeFiles/FileClient.dir/src/mainwindow.cpp.o: CMakeFiles/FileClient.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/FileClient.dir/src/mainwindow.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileClient.dir/src/mainwindow.cpp.o -MF CMakeFiles/FileClient.dir/src/mainwindow.cpp.o.d -o CMakeFiles/FileClient.dir/src/mainwindow.cpp.o -c /home/cuong/DuAnPMCSF/File_Management_App/Client/src/mainwindow.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/FileClient.dir/src/mainwindow.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileClient.dir/src/mainwindow.cpp.o -MF CMakeFiles/FileClient.dir/src/mainwindow.cpp.o.d -o CMakeFiles/FileClient.dir/src/mainwindow.cpp.o -c /mnt/c/Users/Admin/Documents/LTM/Client/src/mainwindow.cpp
 
 CMakeFiles/FileClient.dir/src/mainwindow.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FileClient.dir/src/mainwindow.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cuong/DuAnPMCSF/File_Management_App/Client/src/mainwindow.cpp > CMakeFiles/FileClient.dir/src/mainwindow.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Admin/Documents/LTM/Client/src/mainwindow.cpp > CMakeFiles/FileClient.dir/src/mainwindow.cpp.i
 
 CMakeFiles/FileClient.dir/src/mainwindow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FileClient.dir/src/mainwindow.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cuong/DuAnPMCSF/File_Management_App/Client/src/mainwindow.cpp -o CMakeFiles/FileClient.dir/src/mainwindow.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Admin/Documents/LTM/Client/src/mainwindow.cpp -o CMakeFiles/FileClient.dir/src/mainwindow.cpp.s
 
 CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o: CMakeFiles/FileClient.dir/flags.make
-CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o: /home/cuong/DuAnPMCSF/File_Management_App/Client/src/modules/network_manager.cpp
+CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o: /mnt/c/Users/Admin/Documents/LTM/Client/src/modules/network_manager.cpp
 CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o: CMakeFiles/FileClient.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o -MF CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o.d -o CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o -c /home/cuong/DuAnPMCSF/File_Management_App/Client/src/modules/network_manager.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o -MF CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o.d -o CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o -c /mnt/c/Users/Admin/Documents/LTM/Client/src/modules/network_manager.cpp
 
 CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cuong/DuAnPMCSF/File_Management_App/Client/src/modules/network_manager.cpp > CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Admin/Documents/LTM/Client/src/modules/network_manager.cpp > CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.i
 
 CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cuong/DuAnPMCSF/File_Management_App/Client/src/modules/network_manager.cpp -o CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Admin/Documents/LTM/Client/src/modules/network_manager.cpp -o CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.s
 
 # Object files for target FileClient
 FileClient_OBJECTS = \
 "CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o" \
+"CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o" \
 "CMakeFiles/FileClient.dir/src/main.cpp.o" \
 "CMakeFiles/FileClient.dir/src/mainwindow.cpp.o" \
 "CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o"
@@ -143,6 +158,7 @@ FileClient_OBJECTS = \
 FileClient_EXTERNAL_OBJECTS =
 
 FileClient: CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o
+FileClient: CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o
 FileClient: CMakeFiles/FileClient.dir/src/main.cpp.o
 FileClient: CMakeFiles/FileClient.dir/src/mainwindow.cpp.o
 FileClient: CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o
@@ -154,7 +170,7 @@ FileClient: /usr/lib/x86_64-linux-gnu/libGLX.so
 FileClient: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 FileClient: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.4.2
 FileClient: CMakeFiles/FileClient.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable FileClient"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable FileClient"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/FileClient.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -166,6 +182,6 @@ CMakeFiles/FileClient.dir/clean:
 .PHONY : CMakeFiles/FileClient.dir/clean
 
 CMakeFiles/FileClient.dir/depend: FileClient_autogen/timestamp
-	cd /home/cuong/DuAnPMCSF/File_Management_App/build_client && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cuong/DuAnPMCSF/File_Management_App/Client /home/cuong/DuAnPMCSF/File_Management_App/Client /home/cuong/DuAnPMCSF/File_Management_App/build_client /home/cuong/DuAnPMCSF/File_Management_App/build_client /home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles/FileClient.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /mnt/c/Users/Admin/Documents/LTM/build_client && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/Users/Admin/Documents/LTM/Client /mnt/c/Users/Admin/Documents/LTM/Client /mnt/c/Users/Admin/Documents/LTM/build_client /mnt/c/Users/Admin/Documents/LTM/build_client /mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles/FileClient.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/FileClient.dir/depend
 

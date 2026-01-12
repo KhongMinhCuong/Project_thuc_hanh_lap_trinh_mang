@@ -31,10 +31,35 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     });
     connect(netManager, &NetworkManager::uploadStarted, this, &MainWindow::handleUploadStarted);
     connect(netManager, &NetworkManager::uploadProgress, this, &MainWindow::handleUploadProgress);
+    connect(netManager, &NetworkManager::folderUploadStarted, this, [this](QString folderName, int totalFiles) {
+        if (uploadProgressDialog) {
+            delete uploadProgressDialog;
+        }
+        uploadProgressDialog = new QProgressDialog(QString("Uploading folder: %1 (%2 files)").arg(folderName).arg(totalFiles), QString(), 0, totalFiles, this);
+        uploadProgressDialog->setWindowModality(Qt::WindowModal);
+        uploadProgressDialog->setMinimumDuration(0);
+        uploadProgressDialog->setCancelButton(nullptr);
+        uploadProgressDialog->show();
+    });
+    connect(netManager, &NetworkManager::folderUploadProgress, this, [this](int current, int total, QString fileName) {
+        if (uploadProgressDialog) {
+            uploadProgressDialog->setValue(current);
+            uploadProgressDialog->setLabelText(QString("Uploading: %1 (%2/%3)").arg(fileName).arg(current).arg(total));
+        }
+    });
+    connect(netManager, &NetworkManager::folderUploadCompleted, this, [this](QString folderName) {
+        if (uploadProgressDialog) {
+            uploadProgressDialog->close();
+            delete uploadProgressDialog;
+            uploadProgressDialog = nullptr;
+        }
+        QMessageBox::information(this, "Upload Complete", QString("Folder '%1' uploaded successfully!").arg(folderName));
+    });
     connect(netManager, &NetworkManager::downloadStarted, this, &MainWindow::handleDownloadStarted);
     connect(netManager, &NetworkManager::downloadComplete, this, &MainWindow::handleDownloadComplete);
     connect(netManager, &NetworkManager::shareResult, this, &MainWindow::handleShareResult);
     connect(netManager, &NetworkManager::deleteResult, this, &MainWindow::handleDeleteResult);
+    connect(netManager, &NetworkManager::renameResult, this, &MainWindow::handleRenameResult);
     connect(netManager, &NetworkManager::logoutSuccess, this, &MainWindow::handleLogout);
 }
 
@@ -91,15 +116,15 @@ QWidget* MainWindow::createDashboardPage() {
     QHBoxLayout *btnLayout = new QHBoxLayout;
     QPushButton *btnRefresh = new QPushButton("Refresh");
     QPushButton *btnUpload = new QPushButton("Upload");
-    QPushButton *btnDownload = new QPushButton("Download");
-    QPushButton *btnShare = new QPushButton("Share");
-    QPushButton *btnDelete = new QPushButton("Delete File");
+    
+    // Create upload menu
+    QMenu *uploadMenu = new QMenu(this);
+    QAction *uploadFileAction = uploadMenu->addAction("Upload File");
+    QAction *uploadFolderAction = uploadMenu->addAction("Upload Folder");
+    btnUpload->setMenu(uploadMenu);
     
     btnLayout->addWidget(btnRefresh);
     btnLayout->addWidget(btnUpload);
-    btnLayout->addWidget(btnDownload);
-    btnLayout->addWidget(btnShare);
-    btnLayout->addWidget(btnDelete);
     btnLayout->addStretch();
     QHBoxLayout *navLayout = new QHBoxLayout;
     backButton = new QPushButton("← Back");
@@ -156,10 +181,8 @@ QWidget* MainWindow::createDashboardPage() {
 
     connect(btnRefresh, &QPushButton::clicked, this, &MainWindow::onRefreshClicked);
     connect(backButton, &QPushButton::clicked, this, &MainWindow::onBackButtonClicked);
-    connect(btnUpload, &QPushButton::clicked, this, &MainWindow::onUploadClicked);
-    connect(btnDownload, &QPushButton::clicked, this, &MainWindow::onDownloadClicked);
-    connect(btnShare, &QPushButton::clicked, this, &MainWindow::onShareClicked);
-    connect(btnDelete, &QPushButton::clicked, this, &MainWindow::onDeleteClicked);
+    connect(uploadFileAction, &QAction::triggered, this, &MainWindow::onUploadFileClicked);
+    connect(uploadFolderAction, &QAction::triggered, this, &MainWindow::onUploadFolderClicked);
     connect(btnLogout, &QPushButton::clicked, this, &MainWindow::onLogoutClicked);
     connect(tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
     
@@ -291,6 +314,9 @@ void MainWindow::handleFileList(QString data) {
                 targetTable->setItem(row, 3, new QTableWidgetItem(cols[3].trimmed()));
                 targetTable->setItem(row, 4, new QTableWidgetItem(cols[4].trimmed()));
                 targetTable->setItem(row, 5, new QTableWidgetItem(type));
+                // Store file_id in hidden column 6
+                QTableWidgetItem* fileIdItem = new QTableWidgetItem(cols[4].trimmed());
+                targetTable->setItem(row, 6, fileIdItem);
             } else {
                 targetTable->setItem(row, 0, new QTableWidgetItem(cols[0].trimmed()));
                 targetTable->setItem(row, 1, new QTableWidgetItem(type));
@@ -298,15 +324,30 @@ void MainWindow::handleFileList(QString data) {
                 targetTable->setItem(row, 3, new QTableWidgetItem(cols[3].trimmed()));
                 targetTable->setItem(row, 4, new QTableWidgetItem(cols[4].trimmed()));
                 targetTable->setItem(row, 5, new QTableWidgetItem(type));
+                // Store file_id in hidden column 6
+                QTableWidgetItem* fileIdItem = new QTableWidgetItem(cols[4].trimmed());
+                targetTable->setItem(row, 6, fileIdItem);
             }
         }
     }
 }
 
 void MainWindow::onUploadClicked() {
+    // Backward compatibility - default to file upload
+    onUploadFileClicked();
+}
+
+void MainWindow::onUploadFileClicked() {
     QString filePath = QFileDialog::getOpenFileName(this, "Select File to Upload");
     if (!filePath.isEmpty()) {
         netManager->uploadFile(filePath, currentFolderId);
+    }
+}
+
+void MainWindow::onUploadFolderClicked() {
+    QString folderPath = QFileDialog::getExistingDirectory(this, "Select Folder to Upload");
+    if (!folderPath.isEmpty()) {
+        netManager->uploadFolder(folderPath, currentFolderId);
     }
 }
 
@@ -334,6 +375,33 @@ void MainWindow::onDownloadClicked() {
     
     if (!savePath.isEmpty()) {
         netManager->downloadFile(filename, savePath);
+    }
+}
+
+void MainWindow::onDownloadFolderClicked() {
+    QTableWidget* currentTable = (tabWidget->currentIndex() == 0) ? fileTable : sharedFileTable;
+    
+    int row = currentTable->currentRow();
+    if (row < 0) {
+        QMessageBox::warning(this, "Download Folder", "Please select a folder first!");
+        return;
+    }
+    
+    QString folderName = currentTable->item(row, 0)->text();
+    
+    QString itemType = currentTable->item(row, 5)->text();
+    if (itemType != "Folder") {
+        QMessageBox::warning(this, "Download Folder", "Please select a folder!");
+        return;
+    }
+    
+    QString savePath = QFileDialog::getExistingDirectory(this, 
+                                                          "Select Directory to Save Folder",
+                                                          QDir::homePath() + "/Downloads");
+    
+    if (!savePath.isEmpty()) {
+        QString fullPath = savePath + "/" + folderName;
+        netManager->downloadFolder(folderName, fullPath);
     }
 }
 
@@ -433,20 +501,21 @@ void MainWindow::onShareClicked() {
         return;
     }
     
+    qDebug() << "[MainWindow] Starting share process for:" << itemName << "type:" << itemType << "to user:" << targetUser;
+    
     if (isFolder) {
         if (!idItem) {
             QMessageBox::warning(this, "Share Folder", "Invalid folder data!");
             return;
         }
         long long folderId = idItem->text().toLongLong();
+        qDebug() << "[MainWindow] Sharing folder ID:" << folderId;
         netManager->shareFolderRequest(folderId, targetUser);
     } else {
+        qDebug() << "[MainWindow] Sharing file:" << itemName;
         netManager->shareFile(itemName, targetUser);
     }
-    
-    QMessageBox::information(this, "Share",
-        QString("Share request sent for %1 '%2' to user '%3'.")
-        .arg(itemType.toLower(), itemName, targetUser));
+    // Đã xóa dialog ở đây - sẽ chỉ hiện dialog trong handleShareResult() khi có kết quả từ server
 }
 
 void MainWindow::handleShareResult(bool success, QString msg) {
@@ -459,23 +528,52 @@ void MainWindow::handleShareResult(bool success, QString msg) {
 
 void MainWindow::onDeleteClicked() {
     if (tabWidget->currentIndex() != 0) {
-        QMessageBox::warning(this, "Delete", "You can only delete files from 'My Files' tab!");
+        QMessageBox::warning(this, "Delete", "You can only delete items from 'My Files' tab!");
         return;
     }
     
     int row = fileTable->currentRow();
     if (row < 0) {
-        QMessageBox::warning(this, "Delete", "Please select a file first!");
+        QMessageBox::warning(this, "Delete", "Please select an item first!");
         return;
     }
     
-    QString filename = fileTable->item(row, 0)->text();
+    QTableWidgetItem *nameItem = fileTable->item(row, 0);
+    QTableWidgetItem *typeItem = fileTable->item(row, 1);
     
-    auto reply = QMessageBox::question(this, "Delete File",
-                                       "Are you sure you want to delete \"" + filename + "\"?",
-                                       QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::Yes) {
-        netManager->deleteFile(filename);
+    if (!nameItem || !typeItem) {
+        QMessageBox::warning(this, "Delete", "Invalid selection!");
+        return;
+    }
+    
+    QString itemName = nameItem->text();
+    QString itemType = typeItem->text();
+    bool isFolder = (itemType.toLower() == "folder");
+    
+    // Different dialog messages for file vs folder
+    QString title = isFolder ? "Delete Folder" : "Delete File";
+    QString message;
+    QMessageBox::Icon icon;
+    
+    if (isFolder) {
+        message = QString("Are you sure you want to delete the folder \"%1\"?\n\n"
+                         "⚠️ Warning: This will permanently delete the folder and all its contents!")
+                         .arg(itemName);
+        icon = QMessageBox::Warning;
+    } else {
+        message = QString("Are you sure you want to delete \"%1\"?").arg(itemName);
+        icon = QMessageBox::Question;
+    }
+    
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(title);
+    msgBox.setText(message);
+    msgBox.setIcon(icon);
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    
+    if (msgBox.exec() == QMessageBox::Yes) {
+        netManager->deleteFile(itemName);
     }
 }
 
@@ -485,6 +583,57 @@ void MainWindow::handleDeleteResult(bool success, QString msg) {
         netManager->requestFileList();
     } else {
         QMessageBox::warning(this, "Delete", msg);
+    }
+}
+
+void MainWindow::onRenameClicked() {
+    if (tabWidget->currentIndex() != 0) {
+        QMessageBox::warning(this, "Rename", "You can only rename items from 'My Files' tab!");
+        return;
+    }
+    
+    int row = fileTable->currentRow();
+    if (row < 0) {
+        QMessageBox::warning(this, "Rename", "Please select a file or folder first!");
+        return;
+    }
+    
+    QTableWidgetItem *nameItem = fileTable->item(row, 0);
+    QTableWidgetItem *typeItem = fileTable->item(row, 1);
+    QTableWidgetItem *fileIdItem = fileTable->item(row, 4);
+    
+    if (!nameItem || !typeItem || !fileIdItem) {
+        QMessageBox::warning(this, "Rename", "Invalid selection!");
+        return;
+    }
+    
+    QString oldName = nameItem->text();
+    QString itemType = typeItem->text();
+    QString fileId = fileIdItem->text();
+    
+    bool ok;
+    QString newName = QInputDialog::getText(this, "Rename " + itemType,
+                                           QString("Rename '%1' to:").arg(oldName),
+                                           QLineEdit::Normal, oldName, &ok);
+    
+    if (!ok || newName.isEmpty()) {
+        return;
+    }
+    
+    if (newName == oldName) {
+        QMessageBox::information(this, "Rename", "Name unchanged.");
+        return;
+    }
+    
+    netManager->renameItem(fileId, newName, itemType);
+}
+
+void MainWindow::handleRenameResult(bool success, QString msg) {
+    if (success) {
+        QMessageBox::information(this, "Rename", msg);
+        // File list will be refreshed automatically by NetworkManager
+    } else {
+        QMessageBox::warning(this, "Rename", msg);
     }
 }
 
@@ -521,15 +670,24 @@ void MainWindow::showContextMenu(const QPoint &pos) {
     menu.addSeparator();
     
     if (row >= 0) {
-        QAction *downloadAction = menu.addAction("Download");
-        connect(downloadAction, &QAction::triggered, this, &MainWindow::onDownloadClicked);
+        QString itemType = sourceTable->item(row, 5)->text();
+        
+        if (itemType == "Folder") {
+            QAction *downloadFolderAction = menu.addAction("Download Folder");
+            connect(downloadFolderAction, &QAction::triggered, this, &MainWindow::onDownloadFolderClicked);
+        } else {
+            QAction *downloadAction = menu.addAction("Download File");
+            connect(downloadAction, &QAction::triggered, this, &MainWindow::onDownloadClicked);
+        }
         
         if (sourceTable == fileTable) {
             menu.addSeparator();
             QAction *shareAction = menu.addAction("Share");
+            QAction *renameAction = menu.addAction("Rename");
             QAction *deleteAction = menu.addAction("Delete");
             
             connect(shareAction, &QAction::triggered, this, &MainWindow::onShareClicked);
+            connect(renameAction, &QAction::triggered, this, &MainWindow::onRenameClicked);
             connect(deleteAction, &QAction::triggered, this, &MainWindow::onDeleteClicked);
         }
     }

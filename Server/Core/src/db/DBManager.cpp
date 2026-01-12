@@ -4,6 +4,15 @@
 #include <sstream>
 #include <openssl/sha.h>
 #include <iomanip>
+#include <cstdio>
+#include <cstring>
+#include <sys/stat.h>
+#include <cerrno>
+
+// Define STORAGE_PATH if not already defined
+#ifndef STORAGE_PATH
+#define STORAGE_PATH "./storage/"
+#endif
 
 std::string sha256(const std::string& str) {
     unsigned char hash[SHA256_DIGEST_LENGTH];
@@ -453,6 +462,8 @@ long DBManager::getStorageUsed(std::string username) {
 bool DBManager::shareFile(std::string filename, std::string ownerUsername, std::string targetUsername) {
     if (!conn) return false;
 
+    std::cout << "[DB] shareFile called: file='" << filename << "' owner='" << ownerUsername << "' target='" << targetUsername << "'" << std::endl;
+
     std::string query = "SELECT user_id FROM USERS WHERE username = '" + ownerUsername + "'";
     if (mysql_query(conn, query.c_str())) {
         std::cerr << "[DB] Get owner_id failed: " << mysql_error(conn) << std::endl;
@@ -489,6 +500,7 @@ bool DBManager::shareFile(std::string filename, std::string ownerUsername, std::
     mysql_free_result(result);
 
     query = "SELECT file_id FROM FILES WHERE name = '" + filename + "' AND owner_id = " + owner_id + " AND is_deleted = FALSE";
+    std::cout << "[DB] Searching for file: query='" << query << "'" << std::endl;
     if (mysql_query(conn, query.c_str())) {
         std::cerr << "[DB] Get file_id failed: " << mysql_error(conn) << std::endl;
         return false;
@@ -500,16 +512,18 @@ bool DBManager::shareFile(std::string filename, std::string ownerUsername, std::
     row = mysql_fetch_row(result);
     if (!row) {
         mysql_free_result(result);
-        std::cerr << "[DB] File not found or not owned by user" << std::endl;
+        std::cerr << "[DB] File not found or not owned by user: file='" << filename << "' owner_id=" << owner_id << std::endl;
         return false;
     }
     std::string file_id = row[0];
+    std::cout << "[DB] Found file_id: " << file_id << std::endl;
     mysql_free_result(result);
 
     query = "INSERT INTO SHAREDFILES (file_id, user_id, permission_id) VALUES (" 
             + file_id + ", " + target_user_id + ", 1) "
             "ON DUPLICATE KEY UPDATE shared_at = CURRENT_TIMESTAMP";
     
+    std::cout << "[DB] Executing share insert: " << query << std::endl;
     if (mysql_query(conn, query.c_str())) {
         std::cerr << "[DB] Share file failed: " << mysql_error(conn) << std::endl;
         return false;
@@ -541,6 +555,105 @@ bool DBManager::deleteFile(std::string filename, std::string username) {
     }
 
     std::cout << "[DB] File '" << filename << "' deleted by " << username << std::endl;
+    return true;
+}
+
+bool DBManager::renameFile(long long fileId, std::string newName, std::string username) {
+    if (!conn) return false;
+
+    // First, get the file info (old name, type, owner verification)
+    std::string checkQuery = "SELECT f.name, f.is_folder FROM FILES f "
+                            "JOIN USERS u ON f.owner_id = u.user_id "
+                            "WHERE f.file_id = " + std::to_string(fileId) + " "
+                            "AND u.username = '" + username + "' "
+                            "AND f.is_deleted = FALSE";
+    
+    if (mysql_query(conn, checkQuery.c_str())) {
+        std::cerr << "[DB] Failed to check item: " << mysql_error(conn) << std::endl;
+        return false;
+    }
+    
+    MYSQL_RES* result = mysql_store_result(conn);
+    if (!result || mysql_num_rows(result) == 0) {
+        if (result) mysql_free_result(result);
+        std::cerr << "[DB] Item not found or user is not the owner" << std::endl;
+        return false;
+    }
+    
+    MYSQL_ROW row = mysql_fetch_row(result);
+    std::string oldName = row[0] ? row[0] : "";
+    bool isFolder = (row[1] && std::string(row[1]) == "1");
+    mysql_free_result(result);
+    
+    std::string itemType = isFolder ? "FOLDER" : "FILE";
+    std::cout << "[DB RENAME " << itemType << "] File ID: " << fileId << ", Renaming: '" << oldName << "' -> '" << newName << "' by user: " << username << std::endl;
+
+    // Handle physical rename based on type
+    if (isFolder) {
+        // FOLDER: Check if physical directory exists
+        std::string oldPath = std::string(STORAGE_PATH) + oldName;
+        std::string newPath = std::string(STORAGE_PATH) + newName;
+        
+        std::cout << "[DB RENAME FOLDER] Physical path: " << oldPath << " -> " << newPath << std::endl;
+        
+        struct stat st;
+        if (stat(oldPath.c_str(), &st) == 0) {
+            // Physical folder exists - rename it
+            if (!S_ISDIR(st.st_mode)) {
+                std::cerr << "[DB RENAME FOLDER] ERROR: Expected folder but found file!" << std::endl;
+                return false;
+            }
+            
+            // Rename physical folder first
+            if (std::rename(oldPath.c_str(), newPath.c_str()) != 0) {
+                std::cerr << "[DB RENAME FOLDER] Physical rename FAILED: " << strerror(errno) << std::endl;
+                return false;
+            }
+            std::cout << "[DB RENAME FOLDER] Physical rename successful" << std::endl;
+        } else {
+            // Physical folder doesn't exist - just update database (empty folder from schema)
+            std::cout << "[DB RENAME FOLDER] Physical folder not found, updating database only (empty folder)" << std::endl;
+        }
+    } else {
+        // FILE: Only update database, no physical rename needed
+        std::cout << "[DB RENAME FILE] Skipping physical rename for file (only updating database)" << std::endl;
+    }
+
+    // Update database
+    std::string updateQuery = "UPDATE FILES f "
+                             "JOIN USERS u ON f.owner_id = u.user_id "
+                             "SET f.name = '" + newName + "' "
+                             "WHERE f.file_id = " + std::to_string(fileId) + " "
+                             "AND u.username = '" + username + "' "
+                             "AND f.is_deleted = FALSE";
+    
+    if (mysql_query(conn, updateQuery.c_str())) {
+        std::cerr << "[DB RENAME " << itemType << "] Database update failed: " << mysql_error(conn) << std::endl;
+        // Rollback physical rename if it was a folder
+        if (isFolder) {
+            std::string oldPath = std::string(STORAGE_PATH) + oldName;
+            std::string newPath = std::string(STORAGE_PATH) + newName;
+            std::rename(newPath.c_str(), oldPath.c_str());
+            std::cerr << "[DB RENAME " << itemType << "] Rolled back physical rename" << std::endl;
+        }
+        return false;
+    }
+
+    if (mysql_affected_rows(conn) == 0) {
+        std::cerr << "[DB RENAME " << itemType << "] No rows affected" << std::endl;
+        // Rollback physical rename if it was a folder
+        if (isFolder) {
+            std::string oldPath = std::string(STORAGE_PATH) + oldName;
+            std::string newPath = std::string(STORAGE_PATH) + newName;
+            std::rename(newPath.c_str(), oldPath.c_str());
+            std::cerr << "[DB RENAME " << itemType << "] Rolled back physical rename" << std::endl;
+        }
+        return false;
+    }
+    
+    std::cout << "[DB RENAME " << itemType << "] Database updated successfully" << std::endl;
+
+    std::cout << "[DB RENAME " << itemType << "] SUCCESS: '" << oldName << "' -> '" << newName << "'" << std::endl;
     return true;
 }
 
@@ -665,9 +778,10 @@ long long DBManager::createFolder(std::string foldername, long long parent_id, s
     mysql_free_result(result);
 
     std::stringstream ss;
-    if (parent_id == -1) {
+    if (parent_id == -1 || parent_id == 0) {
+        // Root level folder - parent is NULL or 1
         ss << "INSERT INTO FILES (owner_id, parent_id, name, is_folder, size_bytes) VALUES ("
-           << owner_id << ", 1, '" << foldername << "', TRUE, 0)";
+           << owner_id << ", NULL, '" << foldername << "', TRUE, 0)";
     } else {
         ss << "INSERT INTO FILES (owner_id, parent_id, name, is_folder, size_bytes) VALUES ("
            << owner_id << ", " << parent_id << ", '" << foldername << "', TRUE, 0)";
@@ -751,6 +865,8 @@ FileRecordEx DBManager::getFileInfo(long long file_id) {
 bool DBManager::shareFolderWithUser(long long folder_id, std::string targetUsername) {
     if (!conn) return false;
 
+    std::cout << "[DB] shareFolderWithUser called: folder_id=" << folder_id << " target='" << targetUsername << "'" << std::endl;
+
     std::string query = "SELECT user_id FROM USERS WHERE username = '" + targetUsername + "'";
     if (mysql_query(conn, query.c_str())) {
         std::cerr << "[DB] Get target_user_id failed: " << mysql_error(conn) << std::endl;
@@ -768,11 +884,13 @@ bool DBManager::shareFolderWithUser(long long folder_id, std::string targetUsern
     }
     std::string target_user_id = row[0];
     mysql_free_result(result);
+    std::cout << "[DB] Found target user_id: " << target_user_id << std::endl;
 
     query = "INSERT INTO SHAREDFILES (file_id, user_id, permission_id) VALUES (" 
             + std::to_string(folder_id) + ", " + target_user_id + ", 1) "
             "ON DUPLICATE KEY UPDATE shared_at = CURRENT_TIMESTAMP";
     
+    std::cout << "[DB] Executing folder share: " << query << std::endl;
     if (mysql_query(conn, query.c_str())) {
         std::cerr << "[DB] Share folder failed: " << mysql_error(conn) << std::endl;
         return false;

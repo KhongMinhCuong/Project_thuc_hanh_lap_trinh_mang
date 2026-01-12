@@ -27,7 +27,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_MainWindow_t {
-    uint offsetsAndSizes[70];
+    uint offsetsAndSizes[80];
     char stringdata0[11];
     char stringdata1[20];
     char stringdata2[1];
@@ -39,30 +39,35 @@ struct qt_meta_stringdata_MainWindow_t {
     char stringdata8[21];
     char stringdata9[17];
     char stringdata10[16];
-    char stringdata11[18];
-    char stringdata12[15];
-    char stringdata13[16];
-    char stringdata14[16];
-    char stringdata15[13];
-    char stringdata16[6];
+    char stringdata11[20];
+    char stringdata12[22];
+    char stringdata13[18];
+    char stringdata14[24];
+    char stringdata15[15];
+    char stringdata16[16];
     char stringdata17[16];
-    char stringdata18[4];
-    char stringdata19[22];
-    char stringdata20[4];
-    char stringdata21[7];
-    char stringdata22[20];
-    char stringdata23[20];
-    char stringdata24[15];
-    char stringdata25[5];
+    char stringdata18[16];
+    char stringdata19[13];
+    char stringdata20[6];
+    char stringdata21[16];
+    char stringdata22[4];
+    char stringdata23[22];
+    char stringdata24[4];
+    char stringdata25[7];
     char stringdata26[20];
-    char stringdata27[9];
-    char stringdata28[21];
-    char stringdata29[22];
-    char stringdata30[23];
-    char stringdata31[18];
-    char stringdata32[8];
-    char stringdata33[19];
-    char stringdata34[13];
+    char stringdata27[20];
+    char stringdata28[15];
+    char stringdata29[5];
+    char stringdata30[20];
+    char stringdata31[9];
+    char stringdata32[21];
+    char stringdata33[22];
+    char stringdata34[23];
+    char stringdata35[18];
+    char stringdata36[8];
+    char stringdata37[19];
+    char stringdata38[19];
+    char stringdata39[13];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_MainWindow_t::offsetsAndSizes) + ofs), len 
@@ -79,30 +84,35 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
         QT_MOC_LITERAL(116, 20),  // "handleRegisterFailed"
         QT_MOC_LITERAL(137, 16),  // "onRefreshClicked"
         QT_MOC_LITERAL(154, 15),  // "onUploadClicked"
-        QT_MOC_LITERAL(170, 17),  // "onDownloadClicked"
-        QT_MOC_LITERAL(188, 14),  // "onShareClicked"
-        QT_MOC_LITERAL(203, 15),  // "onDeleteClicked"
-        QT_MOC_LITERAL(219, 15),  // "onLogoutClicked"
-        QT_MOC_LITERAL(235, 12),  // "onTabChanged"
-        QT_MOC_LITERAL(248, 5),  // "index"
-        QT_MOC_LITERAL(254, 15),  // "showContextMenu"
-        QT_MOC_LITERAL(270, 3),  // "pos"
-        QT_MOC_LITERAL(274, 21),  // "onFolderDoubleClicked"
-        QT_MOC_LITERAL(296, 3),  // "row"
-        QT_MOC_LITERAL(300, 6),  // "column"
-        QT_MOC_LITERAL(307, 19),  // "onBackButtonClicked"
-        QT_MOC_LITERAL(327, 19),  // "onBreadcrumbClicked"
-        QT_MOC_LITERAL(347, 14),  // "handleFileList"
-        QT_MOC_LITERAL(362, 4),  // "data"
-        QT_MOC_LITERAL(367, 19),  // "handleUploadStarted"
-        QT_MOC_LITERAL(387, 8),  // "filename"
-        QT_MOC_LITERAL(396, 20),  // "handleUploadProgress"
-        QT_MOC_LITERAL(417, 21),  // "handleDownloadStarted"
-        QT_MOC_LITERAL(439, 22),  // "handleDownloadComplete"
-        QT_MOC_LITERAL(462, 17),  // "handleShareResult"
-        QT_MOC_LITERAL(480, 7),  // "success"
-        QT_MOC_LITERAL(488, 18),  // "handleDeleteResult"
-        QT_MOC_LITERAL(507, 12)   // "handleLogout"
+        QT_MOC_LITERAL(170, 19),  // "onUploadFileClicked"
+        QT_MOC_LITERAL(190, 21),  // "onUploadFolderClicked"
+        QT_MOC_LITERAL(212, 17),  // "onDownloadClicked"
+        QT_MOC_LITERAL(230, 23),  // "onDownloadFolderClicked"
+        QT_MOC_LITERAL(254, 14),  // "onShareClicked"
+        QT_MOC_LITERAL(269, 15),  // "onDeleteClicked"
+        QT_MOC_LITERAL(285, 15),  // "onRenameClicked"
+        QT_MOC_LITERAL(301, 15),  // "onLogoutClicked"
+        QT_MOC_LITERAL(317, 12),  // "onTabChanged"
+        QT_MOC_LITERAL(330, 5),  // "index"
+        QT_MOC_LITERAL(336, 15),  // "showContextMenu"
+        QT_MOC_LITERAL(352, 3),  // "pos"
+        QT_MOC_LITERAL(356, 21),  // "onFolderDoubleClicked"
+        QT_MOC_LITERAL(378, 3),  // "row"
+        QT_MOC_LITERAL(382, 6),  // "column"
+        QT_MOC_LITERAL(389, 19),  // "onBackButtonClicked"
+        QT_MOC_LITERAL(409, 19),  // "onBreadcrumbClicked"
+        QT_MOC_LITERAL(429, 14),  // "handleFileList"
+        QT_MOC_LITERAL(444, 4),  // "data"
+        QT_MOC_LITERAL(449, 19),  // "handleUploadStarted"
+        QT_MOC_LITERAL(469, 8),  // "filename"
+        QT_MOC_LITERAL(478, 20),  // "handleUploadProgress"
+        QT_MOC_LITERAL(499, 21),  // "handleDownloadStarted"
+        QT_MOC_LITERAL(521, 22),  // "handleDownloadComplete"
+        QT_MOC_LITERAL(544, 17),  // "handleShareResult"
+        QT_MOC_LITERAL(562, 7),  // "success"
+        QT_MOC_LITERAL(570, 18),  // "handleDeleteResult"
+        QT_MOC_LITERAL(589, 18),  // "handleRenameResult"
+        QT_MOC_LITERAL(608, 12)   // "handleLogout"
     },
     "MainWindow",
     "onConnectBtnClicked",
@@ -115,9 +125,13 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "handleRegisterFailed",
     "onRefreshClicked",
     "onUploadClicked",
+    "onUploadFileClicked",
+    "onUploadFolderClicked",
     "onDownloadClicked",
+    "onDownloadFolderClicked",
     "onShareClicked",
     "onDeleteClicked",
+    "onRenameClicked",
     "onLogoutClicked",
     "onTabChanged",
     "index",
@@ -138,6 +152,7 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "handleShareResult",
     "success",
     "handleDeleteResult",
+    "handleRenameResult",
     "handleLogout"
 };
 #undef QT_MOC_LITERAL
@@ -149,7 +164,7 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      25,   14, // methods
+      30,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -157,31 +172,36 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,  164,    2, 0x08,    1 /* Private */,
-       3,    0,  165,    2, 0x08,    2 /* Private */,
-       4,    0,  166,    2, 0x08,    3 /* Private */,
-       5,    0,  167,    2, 0x08,    4 /* Private */,
-       6,    1,  168,    2, 0x08,    5 /* Private */,
-       8,    1,  171,    2, 0x08,    7 /* Private */,
-       9,    0,  174,    2, 0x08,    9 /* Private */,
-      10,    0,  175,    2, 0x08,   10 /* Private */,
-      11,    0,  176,    2, 0x08,   11 /* Private */,
-      12,    0,  177,    2, 0x08,   12 /* Private */,
-      13,    0,  178,    2, 0x08,   13 /* Private */,
-      14,    0,  179,    2, 0x08,   14 /* Private */,
-      15,    1,  180,    2, 0x08,   15 /* Private */,
-      17,    1,  183,    2, 0x08,   17 /* Private */,
-      19,    2,  186,    2, 0x08,   19 /* Private */,
-      22,    0,  191,    2, 0x08,   22 /* Private */,
-      23,    0,  192,    2, 0x08,   23 /* Private */,
-      24,    1,  193,    2, 0x08,   24 /* Private */,
-      26,    1,  196,    2, 0x08,   26 /* Private */,
-      28,    1,  199,    2, 0x08,   28 /* Private */,
-      29,    1,  202,    2, 0x08,   30 /* Private */,
-      30,    1,  205,    2, 0x08,   32 /* Private */,
-      31,    2,  208,    2, 0x08,   34 /* Private */,
-      33,    2,  213,    2, 0x08,   37 /* Private */,
-      34,    0,  218,    2, 0x08,   40 /* Private */,
+       1,    0,  194,    2, 0x08,    1 /* Private */,
+       3,    0,  195,    2, 0x08,    2 /* Private */,
+       4,    0,  196,    2, 0x08,    3 /* Private */,
+       5,    0,  197,    2, 0x08,    4 /* Private */,
+       6,    1,  198,    2, 0x08,    5 /* Private */,
+       8,    1,  201,    2, 0x08,    7 /* Private */,
+       9,    0,  204,    2, 0x08,    9 /* Private */,
+      10,    0,  205,    2, 0x08,   10 /* Private */,
+      11,    0,  206,    2, 0x08,   11 /* Private */,
+      12,    0,  207,    2, 0x08,   12 /* Private */,
+      13,    0,  208,    2, 0x08,   13 /* Private */,
+      14,    0,  209,    2, 0x08,   14 /* Private */,
+      15,    0,  210,    2, 0x08,   15 /* Private */,
+      16,    0,  211,    2, 0x08,   16 /* Private */,
+      17,    0,  212,    2, 0x08,   17 /* Private */,
+      18,    0,  213,    2, 0x08,   18 /* Private */,
+      19,    1,  214,    2, 0x08,   19 /* Private */,
+      21,    1,  217,    2, 0x08,   21 /* Private */,
+      23,    2,  220,    2, 0x08,   23 /* Private */,
+      26,    0,  225,    2, 0x08,   26 /* Private */,
+      27,    0,  226,    2, 0x08,   27 /* Private */,
+      28,    1,  227,    2, 0x08,   28 /* Private */,
+      30,    1,  230,    2, 0x08,   30 /* Private */,
+      32,    1,  233,    2, 0x08,   32 /* Private */,
+      33,    1,  236,    2, 0x08,   34 /* Private */,
+      34,    1,  239,    2, 0x08,   36 /* Private */,
+      35,    2,  242,    2, 0x08,   38 /* Private */,
+      37,    2,  247,    2, 0x08,   41 /* Private */,
+      38,    2,  252,    2, 0x08,   44 /* Private */,
+      39,    0,  257,    2, 0x08,   47 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -196,18 +216,23 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,   16,
-    QMetaType::Void, QMetaType::QPoint,   18,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int,   20,   21,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   25,
-    QMetaType::Void, QMetaType::QString,   27,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,   20,
+    QMetaType::Void, QMetaType::QPoint,   22,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,   24,   25,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,   29,
+    QMetaType::Void, QMetaType::QString,   31,
     QMetaType::Void, QMetaType::QString,    7,
-    QMetaType::Void, QMetaType::QString,   27,
-    QMetaType::Void, QMetaType::QString,   27,
-    QMetaType::Void, QMetaType::Bool, QMetaType::QString,   32,    7,
-    QMetaType::Void, QMetaType::Bool, QMetaType::QString,   32,    7,
+    QMetaType::Void, QMetaType::QString,   31,
+    QMetaType::Void, QMetaType::QString,   31,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString,   36,    7,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString,   36,    7,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString,   36,    7,
     QMetaType::Void,
 
        0        // eod
@@ -240,11 +265,19 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onUploadClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onUploadFileClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onUploadFolderClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onDownloadClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onDownloadFolderClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onShareClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onDeleteClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onRenameClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onLogoutClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
@@ -285,6 +318,10 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<bool, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'handleRenameResult'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'handleLogout'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
@@ -305,23 +342,28 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 5: _t->handleRegisterFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 6: _t->onRefreshClicked(); break;
         case 7: _t->onUploadClicked(); break;
-        case 8: _t->onDownloadClicked(); break;
-        case 9: _t->onShareClicked(); break;
-        case 10: _t->onDeleteClicked(); break;
-        case 11: _t->onLogoutClicked(); break;
-        case 12: _t->onTabChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 13: _t->showContextMenu((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
-        case 14: _t->onFolderDoubleClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 15: _t->onBackButtonClicked(); break;
-        case 16: _t->onBreadcrumbClicked(); break;
-        case 17: _t->handleFileList((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 18: _t->handleUploadStarted((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 19: _t->handleUploadProgress((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 20: _t->handleDownloadStarted((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 21: _t->handleDownloadComplete((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 22: _t->handleShareResult((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
-        case 23: _t->handleDeleteResult((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
-        case 24: _t->handleLogout(); break;
+        case 8: _t->onUploadFileClicked(); break;
+        case 9: _t->onUploadFolderClicked(); break;
+        case 10: _t->onDownloadClicked(); break;
+        case 11: _t->onDownloadFolderClicked(); break;
+        case 12: _t->onShareClicked(); break;
+        case 13: _t->onDeleteClicked(); break;
+        case 14: _t->onRenameClicked(); break;
+        case 15: _t->onLogoutClicked(); break;
+        case 16: _t->onTabChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 17: _t->showContextMenu((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
+        case 18: _t->onFolderDoubleClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 19: _t->onBackButtonClicked(); break;
+        case 20: _t->onBreadcrumbClicked(); break;
+        case 21: _t->handleFileList((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 22: _t->handleUploadStarted((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 23: _t->handleUploadProgress((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 24: _t->handleDownloadStarted((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 25: _t->handleDownloadComplete((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 26: _t->handleShareResult((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 27: _t->handleDeleteResult((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 28: _t->handleRenameResult((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 29: _t->handleLogout(); break;
         default: ;
         }
     }
@@ -346,13 +388,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 25)
+        if (_id < 30)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 25;
+        _id -= 30;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 25)
+        if (_id < 30)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 25;
+        _id -= 30;
     }
     return _id;
 }

@@ -9,10 +9,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "" "FileClient_autogen/timestamp" "custom" "FileClient_autogen/deps"
-  "/home/cuong/DuAnPMCSF/File_Management_App/build_client/FileClient_autogen/mocs_compilation.cpp" "CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o" "gcc" "CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o.d"
-  "/home/cuong/DuAnPMCSF/File_Management_App/Client/src/main.cpp" "CMakeFiles/FileClient.dir/src/main.cpp.o" "gcc" "CMakeFiles/FileClient.dir/src/main.cpp.o.d"
-  "/home/cuong/DuAnPMCSF/File_Management_App/Client/src/mainwindow.cpp" "CMakeFiles/FileClient.dir/src/mainwindow.cpp.o" "gcc" "CMakeFiles/FileClient.dir/src/mainwindow.cpp.o.d"
-  "/home/cuong/DuAnPMCSF/File_Management_App/Client/src/modules/network_manager.cpp" "CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o" "gcc" "CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o.d"
+  "/mnt/c/Users/Admin/Documents/LTM/build_client/FileClient_autogen/mocs_compilation.cpp" "CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o" "gcc" "CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o.d"
+  "/mnt/c/Users/Admin/Documents/LTM/Client/src/FolderShareDialog.cpp" "CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o" "gcc" "CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o.d"
+  "/mnt/c/Users/Admin/Documents/LTM/Client/src/main.cpp" "CMakeFiles/FileClient.dir/src/main.cpp.o" "gcc" "CMakeFiles/FileClient.dir/src/main.cpp.o.d"
+  "/mnt/c/Users/Admin/Documents/LTM/Client/src/mainwindow.cpp" "CMakeFiles/FileClient.dir/src/mainwindow.cpp.o" "gcc" "CMakeFiles/FileClient.dir/src/mainwindow.cpp.o.d"
+  "/mnt/c/Users/Admin/Documents/LTM/Client/src/modules/network_manager.cpp" "CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o" "gcc" "CMakeFiles/FileClient.dir/src/modules/network_manager.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

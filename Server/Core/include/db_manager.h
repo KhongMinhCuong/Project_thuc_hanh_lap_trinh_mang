@@ -45,6 +45,7 @@ public:
     long getStorageUsed(std::string username);
     bool shareFile(std::string filename, std::string ownerUsername, std::string targetUsername);
     bool deleteFile(std::string filename, std::string username);
+    bool renameFile(long long fileId, std::string newName, std::string username);
 
     // ===== NEW FUNCTIONS FOR FOLDER SHARE =====
     

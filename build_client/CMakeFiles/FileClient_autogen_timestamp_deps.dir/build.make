@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cuong/DuAnPMCSF/File_Management_App/Client
+CMAKE_SOURCE_DIR = /mnt/c/Users/Admin/Documents/LTM/Client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cuong/DuAnPMCSF/File_Management_App/build_client
+CMAKE_BINARY_DIR = /mnt/c/Users/Admin/Documents/LTM/build_client
 
 # Utility rule file for FileClient_autogen_timestamp_deps.
 
@@ -66,8 +66,8 @@ include CMakeFiles/FileClient_autogen_timestamp_deps.dir/compiler_depend.make
 # Include the progress variables for this target.
 include CMakeFiles/FileClient_autogen_timestamp_deps.dir/progress.make
 
-CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/qt6/libexec/moc
 CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/qt6/libexec/uic
+CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/qt6/libexec/moc
 CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Widgets.so.6.4.2
 CMakeFiles/FileClient_autogen_timestamp_deps: /usr/lib/x86_64-linux-gnu/libQt6Network.so.6.4.2
 
@@ -84,6 +84,6 @@ CMakeFiles/FileClient_autogen_timestamp_deps.dir/clean:
 .PHONY : CMakeFiles/FileClient_autogen_timestamp_deps.dir/clean
 
 CMakeFiles/FileClient_autogen_timestamp_deps.dir/depend:
-	cd /home/cuong/DuAnPMCSF/File_Management_App/build_client && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cuong/DuAnPMCSF/File_Management_App/Client /home/cuong/DuAnPMCSF/File_Management_App/Client /home/cuong/DuAnPMCSF/File_Management_App/build_client /home/cuong/DuAnPMCSF/File_Management_App/build_client /home/cuong/DuAnPMCSF/File_Management_App/build_client/CMakeFiles/FileClient_autogen_timestamp_deps.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /mnt/c/Users/Admin/Documents/LTM/build_client && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/Users/Admin/Documents/LTM/Client /mnt/c/Users/Admin/Documents/LTM/Client /mnt/c/Users/Admin/Documents/LTM/build_client /mnt/c/Users/Admin/Documents/LTM/build_client /mnt/c/Users/Admin/Documents/LTM/build_client/CMakeFiles/FileClient_autogen_timestamp_deps.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/FileClient_autogen_timestamp_deps.dir/depend
 

@@ -4,6 +4,8 @@ file(REMOVE_RECURSE
   "FileClient_autogen"
   "CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o"
   "CMakeFiles/FileClient.dir/FileClient_autogen/mocs_compilation.cpp.o.d"
+  "CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o"
+  "CMakeFiles/FileClient.dir/src/FolderShareDialog.cpp.o.d"
   "CMakeFiles/FileClient.dir/src/main.cpp.o"
   "CMakeFiles/FileClient.dir/src/main.cpp.o.d"
   "CMakeFiles/FileClient.dir/src/mainwindow.cpp.o"
