@@ -334,9 +334,9 @@ void WorkerThread::handleClientMessage(int fd) {
                 response = std::string(CODE_DATA_OPEN) + " Ready to send folder\n";
                 send(fd, response.c_str(), response.length(), 0);
                 
-                // Handle folder download với folder_id
+                // Handle folder download với folder_id - truyền this để trả socket về sau
                 DedicatedThread dt;
-                dt.handleFolderDownload(fd, folder_id, folderInfo.name, username);
+                dt.handleFolderDownload(fd, folder_id, folderInfo.name, username, this);
                 return;
             }
         }

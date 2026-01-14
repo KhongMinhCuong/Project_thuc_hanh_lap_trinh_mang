@@ -874,12 +874,21 @@ void NetworkManager::downloadFolder(long long folder_id, const QString &folderNa
         // Read name
         QByteArray nameData;
         while (nameData.size() < static_cast<int>(nameLen)) {
-            if (!socket->waitForReadyRead(5000)) {
-                connect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
-                emit downloadComplete("Timeout reading name");
-                return;
+            qint64 remaining = nameLen - nameData.size();
+            qint64 available = socket->bytesAvailable();
+            
+            if (available > 0) {
+                // Đọc dữ liệu có sẵn trong buffer
+                nameData.append(socket->read(qMin(remaining, available)));
+            } else {
+                // Chờ thêm dữ liệu
+                if (!socket->waitForReadyRead(5000)) {
+                    connect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+                    qDebug() << "[NetworkManager] Timeout reading name, got" << nameData.size() << "of" << nameLen << "bytes";
+                    emit downloadComplete("Timeout reading name");
+                    return;
+                }
             }
-            nameData.append(socket->read(nameLen - nameData.size()));
         }
         QString name = QString::fromUtf8(nameData);
         
@@ -904,10 +913,10 @@ void NetworkManager::downloadFolder(long long folder_id, const QString &folderNa
             
             // Receive file data
             uint64_t received = 0;
-            qDebug() << "[NetworkManager] Starting to receive file data, size:" << fileSize;
+            qDebug() << "[NetworkManager] Receiving file:" << name << "size:" << fileSize;
             while (received < fileSize) {
-                // Check if data is available first
-                if (socket->bytesAvailable() == 0) {
+                qint64 available = socket->bytesAvailable();
+                if (available == 0) {
                     if (!socket->waitForReadyRead(30000)) {
                         file.close();
                         connect(socket, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
@@ -915,21 +924,23 @@ void NetworkManager::downloadFolder(long long folder_id, const QString &folderNa
                         emit downloadComplete("Timeout receiving file data");
                         return;
                     }
+                    available = socket->bytesAvailable();
                 }
                 
-                qint64 toRead = qMin(static_cast<qint64>(65536), static_cast<qint64>(fileSize - received));
+                // Đọc đúng số bytes cần thiết, không đọc quá fileSize - received
+                qint64 toRead = qMin(available, static_cast<qint64>(fileSize - received));
+                if (toRead <= 0) break;
+                
                 QByteArray chunk = socket->read(toRead);
                 if (chunk.isEmpty()) {
-                    qDebug() << "[NetworkManager] Read returned empty, but should have data";
                     continue;
                 }
                 file.write(chunk);
                 received += chunk.size();
-                qDebug() << "[NetworkManager] Received" << received << "/" << fileSize << "bytes";
             }
             
             file.close();
-            qDebug() << "[NetworkManager] File saved:" << fullPath << "size:" << received;
+            qDebug() << "[NetworkManager] File saved:" << fullPath << "(" << received << "bytes)";
         }
     }
     

@@ -200,9 +200,11 @@ void DedicatedThread::sendFileFromDb(int socketFd, const std::string& filename, 
     std::string fullPath = std::string(STORAGE_PATH) + filename;
     std::cout << "[DedicatedThread] Sending file from DB: " << relativePath << " (path: " << fullPath << ")" << std::endl;
     
+    // Kiểm tra file tồn tại TRƯỚC khi gửi header
     int fd = open(fullPath.c_str(), O_RDONLY);
     if (fd < 0) {
-        std::cerr << "[DedicatedThread] Failed to open file: " << fullPath << " - " << strerror(errno) << std::endl;
+        std::cerr << "[DedicatedThread] File not found on disk, skipping: " << fullPath << " - " << strerror(errno) << std::endl;
+        // KHÔNG gửi gì cả, skip file này
         return;
     }
 
@@ -210,6 +212,7 @@ void DedicatedThread::sendFileFromDb(int socketFd, const std::string& filename, 
     fstat(fd, &st);
     uint64_t fileSize = st.st_size;
 
+    // File tồn tại, bây giờ mới gửi header
     // Send TYPE_FILE
     uint8_t type = TYPE_FILE;
     send(socketFd, &type, 1, 0);
@@ -269,8 +272,10 @@ void DedicatedThread::sendDirectoryFromDb(int socketFd, long long folder_id, con
     }
 }
 
-void DedicatedThread::handleFolderDownload(int socketFd, long long folder_id, const std::string& folderName, const std::string& username) {
+void DedicatedThread::handleFolderDownload(int socketFd, long long folder_id, const std::string& folderName, const std::string& username, WorkerThread* workerRef) {
     std::cout << "[DedicatedThread] Downloading folder from DB: id=" << folder_id << ", name=" << folderName << std::endl;
+    
+    ThreadMonitor::getInstance().reportDedicatedThreadStart();
     
     // Disable Nagle's algorithm for immediate sending
     int flag = 1;
@@ -283,15 +288,21 @@ void DedicatedThread::handleFolderDownload(int socketFd, long long folder_id, co
     uint8_t type = TYPE_END;
     ssize_t sent = send(socketFd, &type, 1, 0);
     std::cout << "[DedicatedThread] Sent TYPE_END (bytes sent: " << sent << ")" << std::endl;
-    
-    // Ensure all data is flushed and received
-    shutdown(socketFd, SHUT_WR); // Signal no more data will be sent
-    
-    // Wait a bit for client to process
-    usleep(500000); // 500ms delay
 
     std::cout << "[DedicatedThread] Folder download completed: " << folderName << std::endl;
-    close(socketFd);
+    
+    ThreadMonitor::getInstance().reportDedicatedThreadEnd();
+    
+    // Trả socket về cho worker thay vì close
+    if (workerRef) {
+        ClientSession restoredSession;
+        restoredSession.socketFd = socketFd;
+        restoredSession.username = username;
+        restoredSession.isAuthenticated = true;
+        
+        workerRef->addClient(socketFd, restoredSession);
+        std::cout << "[DedicatedThread] Socket " << socketFd << " returned to worker (user: " << username << ")" << std::endl;
+    }
 }
 
 void DedicatedThread::handleDownload(int socketFd, std::string filename, std::string username, WorkerThread* workerRef) {
